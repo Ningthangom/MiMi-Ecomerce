@@ -49,8 +49,8 @@ const RegisterComplete = () => {
     try{
         const result = await signInWithEmailLink(auth,email, window.location.href);
 
-         console.log('log in successful: ', result);
-         console.log(auth);
+         /* console.log('log in successful: ', result);
+         console.log(auth); */
 
          // create password
          if(result.user.emailVerified){
@@ -73,6 +73,8 @@ const RegisterComplete = () => {
         console.log(err)
         toast.error(err);
     }
+
+   
 
    
   };

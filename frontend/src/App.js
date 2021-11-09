@@ -50,15 +50,15 @@ const AppWrapper = () => {
 
      const unsubscribe = onAuthStateChanged(auth, async(user) => {
        if(user) {
-         console.log("user in App: ", user)
+        /*  console.log("user in App: ", user) */
          const idTokenResult = await getIdTokenResult(user)
-         console.log("this is idtoken : ", idTokenResult);
+        /*  console.log("this is idtoken : ", idTokenResult); */
          
          // dispatching token
          dispatch({
           type: 'LOGGED_IN_USER',
           payload: {
-            name: user.email,
+            email: user.email,
             token: idTokenResult.token
           }
          })
@@ -69,7 +69,7 @@ const AppWrapper = () => {
        unsubscribe()
      }
 
-  },[])
+  },[dispatch])
 
   return (
     <>

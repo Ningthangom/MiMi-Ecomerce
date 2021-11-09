@@ -9,6 +9,7 @@ import { sendSignInLinkToEmail } from "firebase/auth";
 import {toast} from 'react-toastify';
 
 
+
 const Register = () => {
   const [email, setEmail] = useState("");
 

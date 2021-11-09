@@ -5,8 +5,20 @@ import {combineReducers} from 'redux';
 import {userReducer} from './userReducer'
 
 
- const rootReducer = combineReducers({
+const rootReducer = combineReducers({
     user: userReducer,
-});
+}
+);
 
 export default rootReducer;
+
+/* 
+import { configureStore } from '@reduxjs/toolkit';
+
+
+export default configureStore({
+    rootReducer: {
+    user: userReducer,
+  },
+  devTools: false,
+}); */
