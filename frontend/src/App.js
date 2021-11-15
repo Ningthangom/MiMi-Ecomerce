@@ -1,83 +1,79 @@
-
-
-import React, {useEffect} from "react";
-import { BrowserRouter as Router,  useRoutes} from "react-router-dom";
-
-
+import React, { useEffect } from "react";
+import {
+  BrowserRouter as Router,
+} from "react-router-dom";
 
 // toast
-import { ToastContainer} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // components
-import Header from './components/nav/Header'
-import Login from './pages/Auth/Login'
-import Register from './pages/Auth/Register'
-import Home from './pages/Home'
-import RegisterComplete from './pages/Auth/RegisterComplete'
+import Header from "./components/nav/Header";
 
-// firebase 
-import {auth} from './firebase';
+// firebase
+import { auth } from "./firebase";
 import { onAuthStateChanged, getIdTokenResult } from "firebase/auth";
 
-// redux 
+// redux
 
 //This useDispatch hook returns a reference to the dispatch function from
 // the Redux store. You may use it to dispatch actions as needed.
-import {useDispatch} from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 
-
- 
-const App = () => {
-
-  let routes = useRoutes([
-    { path: "/", element: <Home /> },
-    { path: "/login", element: <Login /> },
-    { path: "/register", element: <Register /> },
-    { path: "/register/complete", element: <RegisterComplete /> },
-    // ...
-  ]);
-  return routes;
-};
-
+import { currentUser } from "./connectBackend/auth";
+import {App} from './components/routes/routes'
 
 const AppWrapper = () => {
-
   const dispatch = useDispatch();
+  const {user} = useSelector((state) => ({ ...state }));
+ /*  console.log("this is user: ", user); */
+
+
+  /*  const routing = useRoutes(App(isProtected)); */
 
   useEffect(() => {
-
-     const unsubscribe = onAuthStateChanged(auth, async(user) => {
-       if(user) {
+    /*  console.log("useEffect is run") */
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
         /*  console.log("user in App: ", user) */
-         const idTokenResult = await getIdTokenResult(user)
-        /*  console.log("this is idtoken : ", idTokenResult); */
-         
-         // dispatching token
-         dispatch({
-          type: 'LOGGED_IN_USER',
-          payload: {
-            email: user.email,
-            token: idTokenResult.token
-          }
-         })
-       }
-     });
+        const idTokenResult = await getIdTokenResult(user);
+        /* console.log("this is idtoken : ", idTokenResult); */
 
-     return () => {
-       unsubscribe()
-     }
+        currentUser(idTokenResult.token)
+          .then((res) => {
+            // this res is coming back from the backend
+            /*  console.log("res coming back from the backend", res); */
+            // send the data to redux state
+            dispatch({
+              type: "LOGGED_IN_USER",
+              payload: {
+                name: res.data.name,
+                email: res.data.email,
+                token: idTokenResult.token,
+                role: res.data.role,
+                _id: res.data._id,
+              },
+            });
+          })
+          .catch((err) => {
+            console.log("sending token to backend did not work", err);
+          });
+        
+      }
+    });
 
-  },[dispatch])
+    return () => {
+      unsubscribe();
+    };
+  }, [dispatch]);
 
   return (
     <>
-    <Router>
-    <Header/>
-    <ToastContainer />
-      <App />
-    </Router>
+      <Router>
+      <Header /> 
+      <ToastContainer />
+        <App isProtected={user}/>
+      </Router>
     </>
   );
 };

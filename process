@@ -1,0 +1,27 @@
+
+    // process of creating search filter functionality in front end 
+
+    1. set a state to an emty string 
+    2. create a search tag or input field 
+    3. create onChange function
+    4. create search function itself 
+    5. use search function with filter and map
+
+// subcategory
+    // creating sub category backend
+    1. create SubCategory model 
+        1.1 SubCategory will be associated with category. 
+            Each subcategory must belong to one parent category.
+    2.write controller(CRULD)
+        2.1 create 
+        2.2 read(get one sub category)
+        2.3 update 
+        2.4 list(get all sub categories)
+        2.5 delete
+    3.write routes
+
+
+
+
+
+  

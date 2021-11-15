@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "@reduxjs/toolkit": "^1.6.2",
-    "styled-components": "^5.3.3"
-  }
-}

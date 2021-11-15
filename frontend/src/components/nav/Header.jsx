@@ -28,13 +28,13 @@ const { SubMenu, Item } = Menu;
 const Header = () => {
 
     const [current, setCurrent] = useState('home');
-    const [loading, setLoading] = useState(false)
+   /*  const [loading, setLoading] = useState(false) */
     let dispatch = useDispatch();
     let navigate = useNavigate();
 
     // this is how to get data from redux state
     let {user} = useSelector((state) => ({...state}));
-    console.log(user);
+    /* console.log(user); */
 
 
     const Logout = () => {
@@ -77,7 +77,10 @@ const Header = () => {
            className="float-right" 
            style={{ position: "absolute", right: 0 }}
            >
-          <Item key="setting:1" icon={<UserOutlined/>}>Profile</Item>
+
+          <Item icon={<UserOutlined />}>
+            {user.role === 'admin' ? <Link to="/admin/dashboard" >Dashboard</Link> :<Link to="/user/history" >Dashboard</Link> }
+          </Item>
           <Item icon={<LogoutOutlined /> } onClick={Logout}>Logout</Item>
         </SubMenu>)}
         

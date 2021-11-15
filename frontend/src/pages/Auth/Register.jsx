@@ -1,17 +1,29 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Button } from "antd";
+import { useNavigate } from "react-router-dom";
 
 // firebase
 import {auth} from '../../firebase';
 import { sendSignInLinkToEmail } from "firebase/auth";
 
+import {useSelector } from "react-redux";
+
 // toast
 import {toast} from 'react-toastify';
 
 
-
 const Register = () => {
   const [email, setEmail] = useState("");
+
+    const navigate = useNavigate();
+    const {user} = useSelector((state) => ({...state}))
+
+  useEffect(() => {
+    if(user && user.token) {
+        navigate("/");
+    }
+
+},[navigate, user])
 
   const handleSubmit = async (e) => {
     //
