@@ -19,7 +19,7 @@ exports.authCheck = async (req, res, next) => {
     next();
    }catch(err){
        res.status(401).json({
-           message:"invalid or expired token"})
+           message:"Please log out and login again"})
        /* console.log("error checking token") */
    }
    

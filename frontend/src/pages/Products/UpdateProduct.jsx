@@ -12,16 +12,55 @@ import {
 import FormCategory from '../../components/Forms/Form'
 
 
-const UpdateCategory = () => {
-  const [name, setName] = useState("");
+
+const initialState = {
+    title: "apple",
+    description: "good",
+    price: "120",
+    category: "",
+    subcategory: [],
+    shipping: "Yes",
+    quantity: "3",
+    images: [],
+    colors: [
+      "Yellow",
+      "Red",
+      "Brown",
+      "Silver",
+      "White",
+      "Blue",
+      "Black",
+      "others",
+    ],
+    brand: "apple",
+    color: "Red",
+  };
+
+const UpdateProduct = () => {
+    const [name, setName] = useState('')
+  const [values, setValues] = useState(initialState);
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-
-
-
   const { user } = useSelector((state) => ({ ...state }));
   const {slug} = useParams();
+
+    // destructing state 
+    const { 
+        title,
+        description,
+        price,
+        category,
+        // categories will be listed for the user to choose
+        categories,
+        subcategory,
+        shipping,
+        quantity,
+        images,
+        colors,
+        brand,
+        color
+      } = values;
 
   useEffect(() => {
     loadACategory();
@@ -32,7 +71,7 @@ const UpdateCategory = () => {
         await getAcategory(slug, user.token)
         .then((res) => {
             console.log(res.data.name)
-            setName(res.data.name);
+            /* setValues(res.data.name); */
         })
         .catch((err) => {
             toast.error(`couldn't get ${slug} category detail`)
@@ -69,4 +108,4 @@ const UpdateCategory = () => {
 
 
 
-export default UpdateCategory;
+export default UpdateProduct;

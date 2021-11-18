@@ -13,6 +13,14 @@ import Home from "../../pages/Home";
 // Admin components
 import AdminDashBoard from "../../pages/Users/Admin/dashboard"
 import Category from "../../pages/Users/Admin/Category"
+import SubCategory from "../../pages/Users/Admin/SubCategory"
+import AddSubCategory from "../../pages/SubCategory/AddSubCategory"
+
+//admin product
+import CreateProductAdmin from "../../pages/Users/Admin/Product/CreateProductAdmin"
+import ListProducts from "../../pages/Products/ListProducts"
+
+import UpdateSubCategory from "../../pages/SubCategory/UpdateSubcategory"
 import OrdersAdmin from "../../pages/Users/Admin/OrdersAdmin"
 import UpdateCategory from '../../pages/Category/UpdatCategory'
 
@@ -74,6 +82,11 @@ export const App = ({isProtected}) => {
         {path: "/admin/orders", element:  <OrdersAdmin />},
         {path: "/admin/category/:slug", element:  <UpdateCategory />},
         {path: "/admin/category", element:  <Category />},
+        {path: "/admin/subcategory", element:  <SubCategory />},
+        {path: "/admin/subcategory/new", element:  <AddSubCategory />},
+        {path: "/admin/subcategory/:slug", element:  <UpdateSubCategory />},
+        {path: "/admin/product/new", element:  <CreateProductAdmin />},
+        {path: "/admin/products", element:  <ListProducts />},
 
     ]},
       

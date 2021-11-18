@@ -5,13 +5,13 @@ const slugify = require('slugify')
 exports.create = async (req, res) => {
 
         try {
-            const {name} = req.body;
+            const {name, parent} = req.body;
             const existingCategory = await subCategory.findOne({name: name});
             if(existingCategory) {  
                 res.status(400).send("category already exists");
 
             }else{
-                 await new subCategory({name, slug: slugify(name)}).save();
+                 await new subCategory({name,parent, slug: slugify(name)}).save();
                 res.send("category was successfully created");
             }
         }catch(err) {
@@ -21,16 +21,14 @@ exports.create = async (req, res) => {
 }
 
 exports.update = async (req,res) => {
-    const {name} = req.body;
+    const {name, parent} = req.body;
     console.log("update subCategory is called", name)
     try{
         
         const updatedsubCategory= await subCategory.findOneAndUpdate(
-            {
-                slug: req.params.slug},
-                {name, slug: slugify(name)},
-                 {new: true
-            }
+            {slug: req.params.slug},
+            {name,parent,slug: slugify(name)},
+            {new: true}
             );
         res.json(updatedsubCategory)
     }catch(err) {
@@ -69,7 +67,7 @@ exports.read = async (req, res) => {
 exports.list = async (req, res) => {
 
     try {
-        const categoryList = await subCategory.find({}).sort({createdAt: -1}).exec();
+        const categoryList = await subCategory.find({}).populate('parent').sort({createdAt: -1}).exec();
         res.json(categoryList);  
     }catch(err) {
         res.status(400).send('getting list of subCategory failed');

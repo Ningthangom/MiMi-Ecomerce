@@ -5,12 +5,12 @@ import { toast } from "react-toastify";
 
 import { useSelector } from "react-redux";
 import {
-  getAllCategories,
-  removeAcategory,
-  createAcategory,
-} from "../../connectBackend/category";
+    getAllsubCategories,
+  removeAsubcategory,
+ 
+} from "../../connectBackend/subcategory";
 
-import FormCategory from "../../components/Forms/Form";
+
 import Search from "../../components/Forms/Search";
 /* import ModalForm from './ModalForm'; */
 
@@ -19,29 +19,17 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 
-import ListItemIcon from "@mui/material/ListItemIcon";
-import List from "@mui/material/List";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
-import Collapse from "@mui/material/Collapse";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
 
-import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 
 const AddCategory = () => {
-  const [name, setName] = useState("");
+ 
   const [loading, setLoading] = useState(false);
-  const [categories, setCategories] = useState([]);
+  const [subcategories, setSubCategories] = useState([]);
+ 
   const [slug, setSlug] = useState("");
   const navigate = useNavigate();
 
-
-
-
-
-  const [category, setCategory] = useState(false);
 
   const [open, setOpen] = useState(false);
   const [handleClose, setHandleClose] = useState(true);
@@ -52,14 +40,16 @@ const AddCategory = () => {
   const { user } = useSelector((state) => ({ ...state }));
 
   useEffect(() => {
-    getCategories();
+    getsubCategories();
   }, []);
 
-  const getCategories = () => {
-    getAllCategories()
+
+
+  const getsubCategories = () => {
+    getAllsubCategories()
       .then((c) => {
-        setCategories(c.data);
-        console.log("this is category from: ", c.data)
+        setSubCategories(c.data);
+        /* console.log(c.data) */
       })
       .catch((error) => {
         toast.error("Categories could not be loaded");
@@ -78,17 +68,17 @@ const AddCategory = () => {
   };
 
   const onClickEdit = (slug) => {
-    navigate(`/admin/category/${slug}`);
+    navigate(`/admin/subcategory/${slug}`);
   };
 
   const deleteCategory = async (slugfromfunc) => {
     console.log("delete Category is called", slugfromfunc);
-    await removeAcategory(slugfromfunc, user.token)
+    await removeAsubcategory(slugfromfunc, user.token)
       .then((res) => {
         console.log(res.data);
         toast.success(`category name: "${slugfromfunc}" has been deleted`);
         setOpen(false);
-        getCategories();
+        getsubCategories();
       })
       .catch((error) => {
         toast.error("Categories could not be deleted");
@@ -96,30 +86,7 @@ const AddCategory = () => {
       });
   };
 
-  // handleAdcategory
-  const handleCategoryClick = () => {
-    setCategory(!category);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setLoading(true);
-
-    // send name with token to connectBackend
-    createAcategory({ name }, user.token)
-      .then((res) => {
-        toast.success(` "${name}" was created successfully`);
-        setName("");
-        setLoading(false);
-        getCategories();
-      })
-      .catch((err) => {
-      /*   toast.error(`${err.response.data}`); */
-      toast.error(`Please log out and login again`, err);
-        setLoading(false);
-        setName("");
-      });
-  };
+ 
 
   // Search function
   const handleSearch = (e) => {
@@ -139,44 +106,16 @@ const AddCategory = () => {
           {loading ? (
             <h4 className="text-danger">Loading...</h4>
           ) : (
-            <h4>Categories</h4>
+            <h4>SubCategories</h4>
           )}
-          <ListItemButton
-            onClick={handleCategoryClick}
-            style={{ borderRadius: 10 }}
-            className="btn btn-primary mb-2"
-          >
-               <ListItemIcon>
-                  <AddCircleIcon />
-                </ListItemIcon>
-            <ListItemText primary="Add New Category" />
-            {category ? <ExpandLess /> : <ExpandMore />}
-          </ListItemButton>
-          <Collapse in={category} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItemButton
-                sx={{ pl: 4 }}
-                style={{ borderRadius: 10 }}
-              >
-               
-                {/* <ListItemText primary="add new category" to="/user/password"/> */}
-                <FormCategory
-                  handleSubmit={handleSubmit}
-                  name={name}
-                  setName={setName}
-                  placeholder="add new category"
-                  style={{width: '100%'}}
-                />
-              </ListItemButton>
-            </List>
-          </Collapse>
+          
           <Search
-            placeholder="search a category"
+            placeholder="search a subcategory"
             handleSearch={handleSearch}
             keyword={keyword}
           />
-          {categories.length > 0 ? (
-            categories.filter(searchWithKeyword(keyword)).map((category) => (
+          {subcategories.length > 0 ? (
+            subcategories.filter(searchWithKeyword(keyword)).map((category) => (
               <div key={category._id} className="alert alert-secondary">
                 {category.name}
                 <Button

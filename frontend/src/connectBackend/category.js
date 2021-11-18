@@ -50,3 +50,12 @@ export const removeAcategory = async (slug, authToken) => {
       }}
     );
   };
+
+
+// get sub categories
+export const getSubCategories = async (_id) => {
+
+  return await axios.get(
+    `${process.env.REACT_APP_API}/category/subcategory/${_id}`,
+  )
+};

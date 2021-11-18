@@ -2,13 +2,13 @@ import React from "react";
 /* import { useNavigate } from 'react-router-dom';
 import {useSelector} from "react-redux"; */
 import AdminNav from "./nav/nav";
-import CreateCategory from "../../Category/CreateCategory";
+import SubCategory from "../../SubCategory/SubCategory";
 
 // media quries
 import json2mq from "json2mq";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-const AdminDashBoard = () => {
+const Category = () => {
   // media quries
   const matches = useMediaQuery(
     json2mq({
@@ -26,13 +26,13 @@ const AdminDashBoard = () => {
             </div>
             <div className="col">
               {/* <p>Admin Dashboard</p> */}
-              This is Dashboard
+              <SubCategory />
             </div>
           </React.Fragment>
         ) : (
           <div className="col">
             {/* <p>Admin Dashboard</p> */}
-           This is Dashboard
+            <SubCategory />
           </div>
         )}
       </div>
@@ -40,4 +40,4 @@ const AdminDashBoard = () => {
   );
 };
 
-export default AdminDashBoard;
+export default Category;

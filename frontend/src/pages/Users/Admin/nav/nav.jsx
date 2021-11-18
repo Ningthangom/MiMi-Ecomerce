@@ -13,7 +13,7 @@ const AdminNav = () => {
   return (
     <nav>
       <li className="nav-item">
-          <Link to="/admin/orders" className="nav-link btn btn-primary">
+          <Link to="/admin/dashboard" className="nav-link btn btn-primary">
             Dashboard
           </Link>
         </li>
@@ -24,7 +24,7 @@ const AdminNav = () => {
           </Link>
         </li>
         <ProductNav />
-        <SubCategory />
+       <SubCategory/>
      {/* orders................................................................. */}
         <li className="nav-item">
           <Link to="/admin/orders" className="nav-link btn btn-primary">

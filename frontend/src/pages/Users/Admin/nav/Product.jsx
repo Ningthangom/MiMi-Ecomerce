@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import ListItemIcon from "@mui/material/ListItemIcon";
 import List from "@mui/material/List";
@@ -20,11 +20,19 @@ import EditIcon from '@mui/icons-material/Edit';
 const ProductNav = () => {
 
   const [product, setProduct] = useState(false);
+  const navigate = useNavigate();
 
   const handleProductClick = () => {
    
     setProduct(!product);
   };
+
+  const handleClickNew = () => {
+    navigate("/admin/product/new")
+  }
+  const handleClickList = () => {
+    navigate("/admin/products")
+  }
 
   return (
     <div>
@@ -35,12 +43,16 @@ const ProductNav = () => {
         </ListItemButton>
         <Collapse in={product} timeout="auto" unmountOnExit >
           <List component="div" disablePadding >
-            <ListItemButton sx={{ pl: 4 }} className="bg-secondary" style={{borderRadius: 10}}> 
+            <ListItemButton 
+            sx={{ pl: 4 }} 
+            className="bg-secondary"
+            onClick={handleClickNew} 
+            style={{borderRadius: 10}}> 
               <ListItemIcon>
                 <AddCircleIcon />
               </ListItemIcon>
               {/* <ListItemText primary="add new category" to="/user/password"/> */}
-              <Link to="/category" >New</Link>
+              <ListItemText>New</ListItemText>
             </ListItemButton>
             <List component="div" disablePadding>
             <ListItemButton sx={{ pl: 4 }} className="bg-primary mt-1" style={{borderRadius: 10}}>
@@ -60,12 +72,17 @@ const ProductNav = () => {
             </ListItemButton>
           </List>
           <List component="div" disablePadding>
-            <ListItemButton sx={{ pl: 4 }} className="bg-primary mt-1" style={{borderRadius: 10}}>
+            <ListItemButton
+             sx={{ pl: 4 }} 
+             className="bg-primary mt-1" 
+             style={{borderRadius: 10}}
+             onClick={handleClickList}
+             >
               <ListItemIcon>
                 <FormatListBulletedIcon />
               </ListItemIcon>
               {/* <ListItemText primary="add new category" to="/user/password"/> */}
-              <Link to="/category" className="text-white">List</Link>
+              <ListItemText>List</ListItemText>
             </ListItemButton>
           </List>
         </Collapse>

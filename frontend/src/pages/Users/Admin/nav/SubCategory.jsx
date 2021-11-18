@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import ListItemIcon from "@mui/material/ListItemIcon";
 import List from "@mui/material/List";
@@ -11,7 +11,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+
 
 
 const SubCategory = () => {
@@ -21,7 +21,14 @@ const SubCategory = () => {
   const handleSubcategoryClick = () => {
     setSubCategory(!subcategory);
   };
+  const navigate = useNavigate();
 
+  const handleClickNew = () =>{
+    navigate('/admin/subcategory/new');
+  }
+  const handleClickList = () =>{
+    navigate('/admin/subcategory');
+  }
 
   return (
     <div>
@@ -34,28 +41,28 @@ const SubCategory = () => {
         </ListItemButton>
         <Collapse in={subcategory} timeout="auto" unmountOnExit >
           <List component="div" disablePadding >
-            <ListItemButton sx={{ pl: 4 }} className="bg-secondary" style={{borderRadius: 10}}> 
+            <ListItemButton sx={{ pl: 4 }} 
+            className="bg-secondary" 
+            style={{borderRadius: 10}} 
+              onClick={handleClickNew}
+            > 
               <ListItemIcon>
                 <AddCircleIcon />
               </ListItemIcon>
               {/* <ListItemText primary="add new category" to="/user/password"/> */}
-              <Link to="/category" >New</Link>
-            </ListItemButton>
-            <ListItemButton sx={{ pl: 4 }} className="bg-danger mt-1" style={{borderRadius: 10}}>
-              <ListItemIcon>
-                <DeleteOutlineIcon />
-              </ListItemIcon>
-              {/* <ListItemText primary="add new category" to="/user/password"/> */}
-              <Link to="/category" className="text-white" >remove</Link>
+              <ListItemText>New</ListItemText>
             </ListItemButton>
           </List>
           <List component="div" disablePadding>
-            <ListItemButton sx={{ pl: 4 }} className="bg-primary mt-1" style={{borderRadius: 10}}>
+            <ListItemButton sx={{ pl: 4 }}
+             onClick={handleClickList}
+             className="bg-primary mt-1" style={{borderRadius: 10}}
+             >
               <ListItemIcon>
                 <FormatListBulletedIcon />
               </ListItemIcon>
               {/* <ListItemText primary="add new category" to="/user/password"/> */}
-              <Link to="/category" className="text-white">List</Link>
+              <ListItemText>List</ListItemText>
             </ListItemButton>
           </List>
         </Collapse>

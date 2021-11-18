@@ -1,5 +1,6 @@
 
 const Category = require('../models/category');
+const Sub = require('../models/subcategory');
 const slugify = require('slugify')
 
 exports.create = async (req, res) => {
@@ -15,6 +16,9 @@ exports.create = async (req, res) => {
                 res.send("category was successfully created");
             }
         }catch(err) {
+            if(res.status(401)){
+                res.status("Please login again and try again");
+            }
             res.status(400).send('creating category failed')
             console.log("error in creating category", err)
         }
@@ -74,5 +78,14 @@ exports.list = async (req, res) => {
     }catch(err) {
         res.status(400).send('getting list of category failed');
         console.log("error in getting list of categories", err)
+    }
+}
+
+exports.getsubcategories = async (req, res) => {
+    try{
+        const subcategories = await Sub.find({parent: req.params._id}).exec();
+        res.json(subcategories)      
+    }catch(err){
+            res.status(400).send("error in getting subcategories related to parent category")
     }
 }

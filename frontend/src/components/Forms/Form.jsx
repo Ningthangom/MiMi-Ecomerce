@@ -9,14 +9,13 @@ const FormCategory = ({name, handleSubmit,setName, placeholder}) => {
           <input
             placeholder={placeholder}
             type="type"
-            className="form-control mb-0"
+            className="form-control mb-2"
             value={name}
             onChange={(e) => setName(e.target.value)}
             autoFocus
             required
           />
-          <br />
-          <button className="btn btn-outline-primary btn-primary float-right mt-0  ">
+          <button className="btn btn-outline-primary btn-primary float-right mt-0">
             Save
           </button>
         </div>
