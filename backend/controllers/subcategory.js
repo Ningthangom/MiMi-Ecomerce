@@ -1,5 +1,6 @@
 
 const subCategory = require('../models/subcategory');
+const Product = require('../models/product')
 const slugify = require('slugify')
 
 exports.create = async (req, res) => {
@@ -53,11 +54,14 @@ exports.remove = async (req, res) => {
 
 exports.read = async (req, res) => {
 
-   try{ let category = await subCategory.findOne({slug: req.params.slug}).exec();
-    if(!category){
+   try{ let subcategory = await subCategory.findOne({slug: req.params.slug}).exec();
+        const products = await Product.find({subcategories: subcategory})
+                                            .populate("category")
+                                            .exec();
+    if(!subcategory){
         res.json("subCategory does not exist")
     }
-    res.json(category);
+    res.json({subcategory, products});
     }catch(err){
         res.status(400).send('getting a subCategory failed');
         console.log("error in getting a subCategory", err);

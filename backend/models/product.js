@@ -7,7 +7,7 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        maxlength: 32,
+        maxlength: 100,
         minLength: 3,
         // text is for searching functional purposes
         text: true,
@@ -44,7 +44,7 @@ const productSchema = new mongoose.Schema({
     // to be connected with
     subcategories:[ {
         type: ObjectId,
-        ref: "SubCategory"
+        ref: "Subcategory"
     }],
     quantity: {
         type: Number,
@@ -69,16 +69,16 @@ const productSchema = new mongoose.Schema({
     },
     brand: {
         type: String,
-        maxlength: 32
+        maxlength: 100
     },
-    /* ratings:[ {
+    ratings:[ {
         star: Number,
         postedBy: {
             type: ObjectId,
             ref: "User"
         }
-    }] */
+    }]
 
 }, {timestamps: true})
 
-module.exports = mongoose.model("Product", productSchema)
+module.exports = mongoose.model("Product", productSchema);

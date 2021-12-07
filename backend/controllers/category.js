@@ -1,5 +1,6 @@
 
 const Category = require('../models/category');
+const Product = require('../models/product');
 const Sub = require('../models/subcategory');
 const slugify = require('slugify')
 
@@ -63,7 +64,11 @@ exports.read = async (req, res) => {
     if(!category){
         res.json("category does not exist")
     }
-    res.json(category);
+    const products = await Product.find({ category }).populate("category").exec();
+    res.json({
+        category,
+         products});
+
     }catch(err){
         res.status(400).send('getting a category failed');
         console.log("error in getting a category", err);

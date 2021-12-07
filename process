@@ -46,9 +46,79 @@
         1.4 the generated url will be sent back to the front end and 
         1.5 display the images by using 
         1.6 now save url to the database 
-    
+
+// pagination
+    1. get the total quantity of the product models 
+    2. set page number in available in the state,
+    3. use Ant design Pagination Component 
+    4. on pagination click, update count state
+    5. make request to the backend based on the page number 
+
+
+// star rating system 
+    //backend
+    - make sure rating object in product models 
+    - create a controller for handling rating object
+        1. required: product id, user and the scale of rating 
+        2. call required objects 
+            - get product id by using req.params.id 
+            - get user by req.user.email 
+            - get rating/star by req.body
+        3. check if the current user has already rated this product 
+            - if yes: update the rating 
+            - else : create new rating 
+    //frontend 
+    - use react-star-rating npm package: read the docs
+    - call StarRating component inside Single Product page 
+    - set: name, numberofstars, ratings, changeRating, isSelected, starRatedColor
+    - post the new rating by handlingsubmit 
+    - request new product details with updated rating
+    - calculate average rating  and showing it in homepage and sigle product page
+        - get all the elements in rating array object and save them inside an array 
+        - using reduce method, add all the elements inside the new array
+        - get the length of the array
+        - get the average by dividing reducedTotal with the length of the array
+        - show the average using StarRating component from use react-star-rating 
 
 
 
+// getting related product (by category)
+  // backend 
+  - create a function to find product by id 
+    - find 3 products that are the same as the previous product
+ // frontend 
+ -  create a function to fetch the data from the back 
+ - call that function inside single product page by passing productId 
+ - render response data in return 
 
-  
+
+ 
+ // search functionality
+    // backend 
+    - will use post method instead of get method as 
+      many paremeters such as price range, brand, category,  will be passed for searching a product
+    - controller 
+        - create searchfiler function 
+            - get input text from req.body
+            - if there is input text then pass that input text into handleQuery function
+        - create handleQuery function
+            - pass input text as a parameter 
+            - find products using {$text{$search: textinput}} as text is set to true inside of product model
+            - populate the product with category, subcategories, ratings
+    // frontend 
+    - react-redux
+        - get the input text and pass it to the backend regardless of their current position/ page
+        - and when the data or product is returned then go to products page and the product with the inputtext
+        // create searchReducer
+            - pass the inputtext as a state parameter
+            - case as "SEARCH_QUERY": 
+                THEN INSIDE RETURN: SPREAD THE STATE AND ACTION.PAYLOAD 
+                {...state, ...action.payload}
+                then as default: 
+                    return the state
+
+        // import created reducer inside index
+            - and put it as search inside the store/conbineReducer
+    - create component
+                    
+                    
