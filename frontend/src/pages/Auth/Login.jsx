@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 
 // redux component
 import { useDispatch, useSelector } from "react-redux";
@@ -20,40 +20,61 @@ import { MailOutlined, GoogleOutlined } from "@ant-design/icons";
 
 import {createOrUpdateUser} from '../../connectBackend/auth';
 
-// redirect users based on role
-const roleBaseRedirect = (res, navigate) => {
-      /* console.log("roleBaseRedirect is called") */
-  if(res.data.role === 'admin'){
-     navigate("/admin/dashboard");
-  }else{
-    navigate("/user/history");
-  }
-}
 
 
-const Login = () => {
+
+const Login = ({}) => {
   const [email, setEmail] = useState("ningthangom@gmail.com");
   const [password, setPassword] = useState("987654321");
   const [loading, setLoading] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
+  const {state} = useLocation();
+
 
   const provider = new GoogleAuthProvider();
+  
+ let navigate = useNavigate();
 
-  let navigate = useNavigate();
+ 
   const dispatch = useDispatch();
+/*   console.log("this is previous url: ",window.history ) */
+
   
 
   useEffect(() => {
-
-    if (user && user.token) {
-      navigate("/")
+    let intended = state;
+    if(intended) {
+      return;
+    }else {
+      if (user && user.token) {
+        navigate("/")
+        
+       }
     }
   }, [navigate, user]);
 
+    // redirect users based on role
+  const roleBaseRedirect = (res, navigate) => {
+    /* console.log("roleBaseRedirect is called") */
+    let intended = state;
+    if(intended) {
+      navigate(`/${intended}`)
+    }else {
+      if(res.data.role === 'admin'){
+        navigate("/admin/dashboard");
+        }else{
+        console.log("rolebased redirect was called",window.history.state )
+          navigate("/user/history");
+        }
+    }
+
+ 
+  }
+
   const handleSubmit = async (e) => {
     //
-    /* console.log("handleSubmit is called") */
+    console.log("handleSubmit is called")
     e.preventDefault();
     setLoading(true);
 
@@ -83,7 +104,7 @@ const Login = () => {
       createOrUpdateUser(idTokenResult.token)
         .then((res) => {
           // this res is coming back from the backend
-          /* console.log("res coming back from the backend", res); */
+          console.log("res coming back from the backend after login", res.data);
           // send the data to redux state
           dispatch({
             type: "LOGGED_IN_USER",
@@ -92,7 +113,9 @@ const Login = () => {
               email: res.data.email,
               token: idTokenResult.token,
               role: res.data.role,
-              _id: res.data._id
+              _id: res.data._id,
+              shippingInfo: res.data.shippingInfo
+
             },
           });
           roleBaseRedirect(res, navigate);

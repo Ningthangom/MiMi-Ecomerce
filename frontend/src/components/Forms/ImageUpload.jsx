@@ -5,6 +5,8 @@ import {useSelector } from 'react-redux';
 
 import { Avatar, Badge } from 'antd';
 
+import { toast } from "react-toastify";
+
 import LoadingOutlined from '@ant-design/icons'
 
 const ImageUpload= ({values, setValues, setLoading}) => {
@@ -45,9 +47,15 @@ const ImageUpload= ({values, setValues, setLoading}) => {
                             setLoading(false);
                         })
                         .catch( (err) => {
-                            console.log("error posting images to backend", err)
-                            setLoading(false);
-                            setImageloading(false)
+
+                            if(err.response.status === 401) {
+                                toast.error("please logout and login again")
+                            }else{
+                                console.log("error posting images to backend", err)
+                                setLoading(false);
+                                setImageloading(false)
+                            }
+                            
                         }    
                         )
                     },

@@ -8,7 +8,10 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // components
-import Header from "./components/nav/Header";
+import PrimarySearchAppBar from "./components/nav/HeaderMui";
+import Header from "./components/nav/Header"
+/* import Navbar from "./components/nav/menu/ManinNav"; */
+import Navbar from './components/nav/Navbar'
 
 // firebase
 import { auth } from "./firebase";
@@ -22,6 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { currentUser } from "./connectBackend/auth";
 import {App} from './components/routes/routes'
+import SideDrawer from './components/drawer/SideDrawer'
 
 const AppWrapper = () => {
   const dispatch = useDispatch();
@@ -52,6 +56,7 @@ const AppWrapper = () => {
                 token: idTokenResult.token,
                 role: res.data.role,
                 _id: res.data._id,
+                shippingInfo: res.data.shippingInfo
               },
             });
           })
@@ -70,8 +75,9 @@ const AppWrapper = () => {
   return (
     <>
       <Router>
-      <Header /> 
-      <ToastContainer />
+      <Navbar   />
+      <SideDrawer/>
+      <ToastContainer   />
         <App isProtected={user}/>
       </Router>
     </>

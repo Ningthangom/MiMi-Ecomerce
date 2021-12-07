@@ -1,8 +1,5 @@
 import React from 'react';
 
-
-
-
 const Search = ({keyword, handleSearch, placeholder}) => {
 
     return (

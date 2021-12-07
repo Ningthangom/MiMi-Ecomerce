@@ -2,15 +2,21 @@ import React, {useEffect, useState } from 'react';
 
 import { toast } from "react-toastify";
 import {useNavigate} from 'react-router-dom';
+import { useSelector } from "react-redux";
 
 
-import {getAllProducts} from '../../connectBackend/product'
+import {getAllProducts, removeAproduct} from '../../connectBackend/product'
+import AdminProductCard from '../../components/Cards/AdminProductCard'
+
 
 
 
 const ListProducts = () => {
 
     const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(false );
+    const {user}= useSelector((state) => ({...state}))
+   
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -19,43 +25,63 @@ const ListProducts = () => {
     
 
     const getProducts = () => {
-        getAllProducts()
+        setLoading(true);
+        getAllProducts(100)
           .then((c) => {
             setProducts(c.data);
-            console.log("this is category from: ", c.data)
+            console.log("this is products from: ", c.data)
+            setLoading(false);
           })
           .catch((error) => {
-            toast.error("Categories could not be loaded");
+            toast.error("products could not be loaded");
             console.log(error);
+            setLoading(false);
           });
       };
 
-      const onClickEdit = (slug) => {
-        navigate(`/admin/products/${slug}`);
+
+      const handleRemove = async (slugfromfunc) => {
+        console.log("delete Proudct is called", slugfromfunc);
+        await removeAproduct(slugfromfunc, user.token)
+          .then((res) => {
+            console.log(res.data);
+            toast.success(`product name: "${slugfromfunc}" has been deleted`);
+            getProducts();
+          })
+          .catch((error) => {
+            toast.error("product could not be deleted");
+            console.log("error in deleting product", error);
+          
+          });
       };
+
+      const handleUpdate = (slug) => {
+        navigate(`/admin/products/update/${slug}`)
+      }
 
 
     return (
-        <div className="container-fluid">
-           {products.map((product) => (
-              <div key={product._id} className="alert alert-secondary">
-                {product.title}
-                <button
-                  className="float-right btn btn-sm btn-danger mt-0 pt-1 text-white"
-                  /* onClick={() => openModal(product.slug)} */
-                >
-                  Delete
-                </button>
-                <button
-                  className=" mr-3 float-right btn btn-sm btn-primary mt-0 pt-1"
-                  style={{ justifyContent: "center" }}
-                  onClick={() => onClickEdit(product.slug)}
-                >
-                  Edit
-                </button>
-                </div>
-           ))}
+      <div className="container-fluid">
+      <div className="row">
+        {/* <div className="col-md-2">
+          <AdminNav />
+        </div> */}
+        <div className="col">
+          {loading ? (
+            <h4 className="text-danger">Loading...</h4>
+          ) : (
+            <h4>All Products</h4>
+          )}
+          <div className="row">
+            {products.map((product) => (
+              <div key={product._id} className="col-md-4 ">
+                <AdminProductCard product={product} handleRemove={handleRemove} handleUpdate={handleUpdate}/>
+              </div>
+            ))}
+          </div>
         </div>
+      </div>
+    </div>
     )
 }
 

@@ -28,6 +28,7 @@ const ProductForm = ({
     brand,
     color,
   } = values;
+  console.log("this is values inside productform: ", values);
 
   return (
     <form onSubmit={handleSubmit}>

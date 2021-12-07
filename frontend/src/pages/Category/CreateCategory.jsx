@@ -121,6 +121,11 @@ const AddCategory = () => {
       });
   };
 
+
+  const onClickViewSubs = () => {
+
+  }
+
   // Search function
   const handleSearch = (e) => {
     e.preventDefault();
@@ -130,6 +135,7 @@ const AddCategory = () => {
   // step four
   const searchWithKeyword = (keyword) => (c) =>
     c.name.toLowerCase().includes(keyword);
+
 
   return (
     <div className="container-fluid" ml-0>
@@ -180,18 +186,25 @@ const AddCategory = () => {
               <div key={category._id} className="alert alert-secondary">
                 {category.name}
                 <Button
-                  className="float-right btn btn-sm btn-danger mt-0 pt-1 text-white"
+                  className="float-right btn btn-sm btn-danger mt-0 pt-1 text-white mr-0"
                   onClick={() => openModal(category.slug)}
                 >
-                  Delete
+                  Del
                 </Button>
                 <button
-                  className=" mr-3 float-right btn btn-sm btn-primary mt-0 pt-1"
+                  className=" mr-2 float-right btn btn-sm btn-primary mt-0 pt-2"
                   style={{ justifyContent: "center" }}
                   onClick={() => onClickEdit(category.slug)}
                 >
                   Edit
                 </button>
+             {/*    <button
+                  className=" mr-0 float-right btn btn-sm btn-primary mt-0 p-2"
+                  style={{ justifyContent: "center" }}
+                  onClick={() => onClickViewSubs(category.slug)}
+                >
+                  subs
+                </button> */}
 
                 <Modal
                   open={open}

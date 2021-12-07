@@ -31,7 +31,7 @@ const ProductNav = () => {
     navigate("/admin/product/new")
   }
   const handleClickList = () => {
-    navigate("/admin/products")
+    navigate("/admin/dashboard")
   }
 
   return (

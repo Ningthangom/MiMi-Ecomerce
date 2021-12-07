@@ -12,7 +12,7 @@ import {
   getSubCategories,
 } from "../../connectBackend/category";
 
-import LoadingOutlined from '@ant-design/icons'
+
 
 const initialState = {
   title: "apple",
@@ -49,6 +49,7 @@ const CreateProduct = () => {
 
   useEffect(() => {
     loadCategories();
+    setValues(initialState);
   }, []);
 
   // destructing state
@@ -68,6 +69,7 @@ const CreateProduct = () => {
         console.log(res.data);
         toast.success(`${title} is posted successfully`);
         setValues(initialState);
+        console.log("this is initialState after posting product", initialState);
         navigate("/admin/products");
       })
       .catch((err) => {
@@ -107,7 +109,6 @@ const CreateProduct = () => {
         <h4>What do you want to sell today?</h4>
          {loading ? (<h4 className="text-danger">Loading ...</h4>) : (null
               )}
-     {/*  {JSON.stringify(values.images)} */}
       <div className="p-3">
         <ImageUpload 
         values={values} 

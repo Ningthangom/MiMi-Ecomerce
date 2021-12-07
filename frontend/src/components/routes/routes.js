@@ -19,6 +19,7 @@ import AddSubCategory from "../../pages/SubCategory/AddSubCategory"
 //admin product
 import CreateProductAdmin from "../../pages/Users/Admin/Product/CreateProductAdmin"
 import ListProducts from "../../pages/Products/ListProducts"
+import UpdateProductAdmin from "../../pages/Users/Admin/Product/UpdateProductAdmin"
 
 import UpdateSubCategory from "../../pages/SubCategory/UpdateSubcategory"
 import OrdersAdmin from "../../pages/Users/Admin/OrdersAdmin"
@@ -31,9 +32,20 @@ import { currentAdmin } from "../../connectBackend/auth";
 import History from "../../pages/Users/Customer/History";
 import Password from "../../pages/Users/Customer/Password";
 import Wishlist from "../../pages/Users/Customer/Wishlist"
+import Payment from "../../pages/Stripe/Payment";
 
 // Admin routes
 import LoadingToRedirect from './LoadingToRedirect';
+import CreateCouponPage from '../../pages/Users/Admin/coupon/CreateCoupon'
+
+//general 
+import ProductDetail from "../../pages/ProductDetail"
+import CategoryHome from '../../components/Category/CategoryHome'
+import SubProducts from '../../components/Subcategories/SubProducts'
+import SearchProduct from '../../components/Forms/SearchProduct'
+import Shop from '../../pages/Shop'
+import Cart from '../../pages/Cart'
+import CheckOut from '../../pages/CheckOut'
 
 
 
@@ -74,6 +86,8 @@ export const App = ({isProtected}) => {
           {path: "/user/history", element: <History />},
           {path: "/user/password", element: <Password />},
           {path: "/user/wishlist", element: <Wishlist />}, 
+          {path: "/user/checkout", element: <CheckOut />}, 
+          {path: "/user/payment", element: <Payment />}, 
       ]},
       { path: "/admin", element: isAdmin ?  <Outlet /> 
       : <LoadingToRedirect />,
@@ -87,10 +101,25 @@ export const App = ({isProtected}) => {
         {path: "/admin/subcategory/:slug", element:  <UpdateSubCategory />},
         {path: "/admin/product/new", element:  <CreateProductAdmin />},
         {path: "/admin/products", element:  <ListProducts />},
+        {path: "/admin/products/update/:slug", element:  <UpdateProductAdmin />},
+        {path: "/admin/coupon/new", element:  <CreateCouponPage />},
 
     ]},
+    // product routes 
+    { path: "/product/:slug", element: <ProductDetail />},
       
       // ...
+    // category routes 
+    { path: "/category/:slug", element: <CategoryHome />},
+    //subcategory products
+    { path: "/subcategory/:slug", element: <SubProducts />},
+    
+    // search
+    {path:'/shop?', element: <SearchProduct />},
+    {path:'/shop', element: <Shop />},
+    {path: '/cart', element: <Cart />}
+
+
     ]);
     return  routes;
     ;

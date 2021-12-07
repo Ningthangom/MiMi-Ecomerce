@@ -56,6 +56,6 @@ export const removeAcategory = async (slug, authToken) => {
 export const getSubCategories = async (_id) => {
 
   return await axios.get(
-    `${process.env.REACT_APP_API}/category/subcategory/${_id}`,
+    `${process.env.REACT_APP_API}/category/subcategory/${_id}}`,
   )
 };

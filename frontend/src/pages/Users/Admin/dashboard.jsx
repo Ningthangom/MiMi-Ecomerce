@@ -2,7 +2,7 @@ import React from "react";
 /* import { useNavigate } from 'react-router-dom';
 import {useSelector} from "react-redux"; */
 import AdminNav from "./nav/nav";
-import CreateCategory from "../../Category/CreateCategory";
+import ListProducts from '../../Products/ListProducts'
 
 // media quries
 import json2mq from "json2mq";
@@ -26,13 +26,14 @@ const AdminDashBoard = () => {
             </div>
             <div className="col">
               {/* <p>Admin Dashboard</p> */}
-              This is Dashboard
+              <ListProducts/>
             </div>
           </React.Fragment>
         ) : (
           <div className="col">
             {/* <p>Admin Dashboard</p> */}
-           This is Dashboard
+           {/* This is Dashboard */}
+           <ListProducts/>
           </div>
         )}
       </div>

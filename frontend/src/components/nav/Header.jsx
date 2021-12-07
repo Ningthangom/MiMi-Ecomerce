@@ -16,9 +16,15 @@ import {toast} from 'react-toastify';
 // firbase 
 import { getAuth, signOut } from "firebase/auth";
 
+// media quries
+import json2mq from "json2mq";
+import useMediaQuery from "@mui/material/useMediaQuery";
+
 
 // redux 
-import {useDispatch, useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux';
+/* import SearchProduct from '../Forms/SearchProduct' */
+import SearchProductMui from "../Forms/SearchProductMui"
 
 
 
@@ -65,11 +71,19 @@ const Header = () => {
 
     }
 
+     // media quries
+  const matches = useMediaQuery(
+    json2mq({
+      minWidth: 500,
+    })
+  );
+
     return (
       <Menu onClick={handleClick} selectedKeys={[current]} mode="horizontal">
         <Item key="home" icon={<ShopOutlined />}>
-          <Link to="/">Store{/* {JSON.stringify(user)} */}</Link>
+          <Link to="/">Store</Link>
         </Item>
+
         { user && (
         <SubMenu key="SubMenu"
          icon={<SettingOutlined />}
@@ -101,6 +115,11 @@ const Header = () => {
         >
           <Link to="/register">Register</Link>
         </Item>)}
+        <Item>
+        <SearchProductMui />
+          </Item>
+        
+       
       </Menu>
     );
 
