@@ -40,12 +40,13 @@ const userSchema = new mongoose.Schema({
            /*  required: true */
         },
     },
-   /*  wishlist: [
+    wishlist: [
         { 
             type: ObjectId,
             ref: "Product"
-        }
-    ] */
+        }, 
+       
+    ]
     
 
 }, {timestamps: true});

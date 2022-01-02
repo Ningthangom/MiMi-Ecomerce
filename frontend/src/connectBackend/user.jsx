@@ -52,6 +52,8 @@ export const userCart = async (cart, authtoken) =>
 
 
   
+
+  // orders
   export const createOrder = async (stripeResponse, authtoken) =>{
     console.log(`createOrder is called inside user connectbackend`)
  return await axios.post(
@@ -63,6 +65,74 @@ export const userCart = async (cart, authtoken) =>
       },
     }
   )};
+
+  export const createCashOrderForUser = async (authtoken, COD, couponTrueOrFalse) =>
+  await axios.post(
+    `${process.env.REACT_APP_API}/user/cash-order`,
+    {couponApplied: couponTrueOrFalse, COD },
+    {
+      headers: {
+        authtoken,
+      },
+    }
+  );
+
+  export const createPickupOrder = async (authtoken, PNP, couponTrueOrFalse) =>
+  await axios.post(
+    `${process.env.REACT_APP_API}/user/pickup-order`,
+    {couponApplied: couponTrueOrFalse, PNP },
+    {
+      headers: {
+        authtoken,
+      },
+    }
+  );
+
+
+
+  export const getOrderList = async (authtoken) =>{
+    console.log(`getOrderList is called inside user connectbackend`)
+ return await axios.get(
+    `${process.env.REACT_APP_API}/user/orders`,
+    {
+      headers: {
+        authtoken,
+      },
+    }
+  )};
+
+
+  // wishList 
+  export const getWishlist = async (authtoken) =>
+  await axios.get(`${process.env.REACT_APP_API}/user/wishlist`, {
+    headers: {
+      authtoken,
+    },
+  });
+
+export const removeWishlist = async (productId, authtoken) =>
+  await axios.put(
+    `${process.env.REACT_APP_API}/user/wishlist/${productId}`,
+    {},
+    {
+      headers: {
+        authtoken,
+      },
+    }
+  );
+
+export const addToWishlist = async (productId, authtoken) =>
+  await axios.post(
+    `${process.env.REACT_APP_API}/user/wishlist`,
+    { productId },
+    {
+      headers: {
+        authtoken,
+      },
+    }
+  );
+
+
 
 
 

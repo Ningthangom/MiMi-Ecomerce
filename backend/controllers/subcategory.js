@@ -43,7 +43,7 @@ exports.remove = async (req, res) => {
     console.log(req.params.slug)
    
     try {
-         const deleted = await subCategory.findOneAndRemove({slug: req.params.slug});
+         const deleted = await subCategory.delete({slug: req.params.slug});
         res.json(deleted);
         console.log("subCategory was deleted successfully")
     }catch(err){
@@ -54,7 +54,7 @@ exports.remove = async (req, res) => {
 
 exports.read = async (req, res) => {
 
-   try{ let subcategory = await subCategory.findOne({slug: req.params.slug}).exec();
+   try{ let subcategory = await subCategory.findOne({slug: req.params.slug, deleted: {$ne: true}}).exec();
         const products = await Product.find({subcategories: subcategory})
                                             .populate("category")
                                             .exec();
@@ -71,7 +71,7 @@ exports.read = async (req, res) => {
 exports.list = async (req, res) => {
 
     try {
-        const categoryList = await subCategory.find({}).populate('parent').sort({createdAt: -1}).exec();
+        const categoryList = await subCategory.find({deleted: {$ne: true}}).populate('parent').sort({createdAt: -1}).exec();
         res.json(categoryList);  
     }catch(err) {
         res.status(400).send('getting list of subCategory failed');

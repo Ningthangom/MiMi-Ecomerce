@@ -118,7 +118,7 @@ const CartTableBody = ({p}) => {
             <Td>{p.title.substring(0, 10)}</Td>
             <Td>$ {p.price}</Td>
             <Td>{p.brand.substring(0, 10)}</Td>
-            <Td>
+          {/*   <Td>
               <select
                 onChange={handleColorChange}
                 name="color"
@@ -138,7 +138,7 @@ const CartTableBody = ({p}) => {
                     </option>
                   ))}
               </select>
-            </Td>
+            </Td> */}
             <Td className="text-center">
               <select
                onChange={handleQuantityChange}

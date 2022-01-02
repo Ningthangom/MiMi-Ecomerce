@@ -49,7 +49,9 @@ exports.remove = async (req, res) => {
     console.log(req.params.slug)
    
     try {
-         const deleted = await Category.findOneAndRemove({slug: req.params.slug});
+       
+        /* const deleted = await Category.findOneAndRemove({slug: req.params.slug}); */
+        const deleted = await Category.delete({slug: req.params.slug}); 
         res.json(deleted);
         console.log("category was deleted successfully")
     }catch(err){
@@ -64,7 +66,7 @@ exports.read = async (req, res) => {
     if(!category){
         res.json("category does not exist")
     }
-    const products = await Product.find({ category }).populate("category").exec();
+    const products = await Product.find({ category, deleted: {$ne: true} }).populate("category").exec();
     res.json({
         category,
          products});
@@ -78,8 +80,9 @@ exports.read = async (req, res) => {
 exports.list = async (req, res) => {
 
     try {
-        const categoryList = await Category.find({}).sort({createdAt: -1}).exec();
+        const categoryList = await Category.find({deleted: {$ne: true}}).sort({createdAt: -1}).exec();
         res.json(categoryList);  
+        console.log("category list was called")
     }catch(err) {
         res.status(400).send('getting list of category failed');
         console.log("error in getting list of categories", err)
@@ -88,9 +91,14 @@ exports.list = async (req, res) => {
 
 exports.getsubcategories = async (req, res) => {
     try{
-        const subcategories = await Sub.find({parent: req.params._id}).exec();
-        res.json(subcategories)      
+        console.log("req body: ",  req.params)
+        const subcategories = await Sub.find({ parent: req.params.id, deleted: {$ne: true} }).exec();
+        res.json(subcategories)   
+       /*  console.log("subcategories: ", subcategories); */
     }catch(err){
+        console.log("error in getting subs: ", err)
             res.status(400).send("error in getting subcategories related to parent category")
     }
 }
+
+

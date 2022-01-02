@@ -6,8 +6,8 @@ const slugify = require('slugify')
 
 exports.create = async (req, res) => {
         try {
-            console.log("product create function is called ");
-            console.log(req.body);
+           /*  console.log("product create function is called ");
+            console.log(req.body); */
             req.body.slug = slugify(req.body.title);
             const {title} = req.body;
             const existingProduct = await Product.findOne({title : title})
@@ -15,7 +15,7 @@ exports.create = async (req, res) => {
                 res.status(400).send("product already exists");
             } else{
                 const product = await new Product(req.body).save();
-                console.log("product was created successfully");
+              /*   console.log("product was created successfully"); */
                 res.json(product);
             }
            
@@ -27,30 +27,37 @@ exports.create = async (req, res) => {
 // getting all products
 exports.listAll = async (req, res) => {
     try {
-        const productList = await Product.find({})
+    /*   console.log("list all is called: ") */
+        const productList = await Product.find({deleted: {$ne: true}})
         .limit(parseInt(req.params.count))
         .populate('category')
         .populate('subcategories')
-        .sort({createdAt: -1}).exec();
-        res.json(productList);  
+        .sort({createdAt: -1})
+       
+     /*  let existingProduct = productList.filter(product => product.deleted === false)
+
+        res.json(existingProduct);  */
+        
+        res.json(productList);
+     /*    console.log(productList) */
     }catch(err) {
         res.status(400).send('getting list of product failed');
-        console.log("error in getting list of products", err)
+       /*  console.log("error in getting list of products", err) */
     }
 }
 
 
 
 exports.remove = async (req, res) => {
-    console.log(req.params.slug)
+   /*  console.log(req.params.slug) */
    
     try {
-         const deleted = await Product.findOneAndRemove({slug: req.params.slug});
+         const deleted = await Product.delete({slug: req.params.slug});
         res.json(deleted);
-        console.log("Product was deleted successfully")
+       /*  console.log("Product was deleted successfully") */
     }catch(err){
         res.status(400).send('deleting Product failed')
-        console.log("error in deleting Product", err);
+    /*     console.log("error in deleting Product", err); */
     }
 }
 
@@ -104,7 +111,7 @@ exports.sortedlist = async (req, res) => {
       const currentPage = page || 1;
       const itemsPerpage = 3;
 
-      const products = await Product.find({})
+      const products = await Product.find({deleted: {$ne: true}})
         //skip for pagination
         .skip((currentPage - 1 ) * itemsPerpage)
         .populate("category")
@@ -122,7 +129,7 @@ exports.sortedlist = async (req, res) => {
   // getting total product count    
   exports.totalProductCount = async (req, res) => {
       try{
-        let total = await Product.find({}).estimatedDocumentCount().exec();
+        let total = await Product.find({deleted: {$ne: true}}).estimatedDocumentCount().exec();
         res.json(total)
       }catch(err){
         console.log("error in getting totalproductcount: ", err)
@@ -185,16 +192,22 @@ exports.sortedlist = async (req, res) => {
   // search and filter function 
   const handleQuery = async (req, res, query) => {
     /* console.log("this is textInput inside Hadlequery: ", query) */
-    const products = await Product.find({
+  try{  const products = await Product.find(
+      {
       // find by text, as text is set to true inside product model
-      $or: [{title: {$regex: query, $options: 'i'}},{description: {$regex: query, $options: 'i'}} ]
-    })
+      $or: [{title: {$regex: query, $options: 'i'}},{description: {$regex: query, $options: 'i'}} ],
+      deleted: {$ne: true}
+    }
+    )
     .populate('category', '_id name')
     .populate('subcategories', '_id name')
     .populate('ratings', '_id postedBy')
     .exec();
 
     res.json(products)
+  }catch (err) {
+    console.log("error in querying products: ", err)
+  }
    /*  console.log(products) */
   }
 
@@ -205,6 +218,7 @@ exports.sortedlist = async (req, res) => {
           $gte: price[0],
           $lte: price[1],
         },
+        deleted: {$ne: true}
       })
       .populate('category', '_id name')
       .populate('subcategories', '_id name')
@@ -212,6 +226,7 @@ exports.sortedlist = async (req, res) => {
       .exec();
   
       res.json(products)
+     /*  console.log("handle price product: ", products) */
     } catch (err) {
       console.log(err);
     }
@@ -220,7 +235,7 @@ exports.sortedlist = async (req, res) => {
 
   const handleCategory = async (req, res, category) => {
     try {
-      let products = await Product.find({ category })
+      let products = await Product.find({ category, deleted: {$ne: true} })
       .populate('category', '_id name')
       .populate('subcategories', '_id name')
       .populate('ratings', '_id postedBy')
@@ -232,30 +247,6 @@ exports.sortedlist = async (req, res) => {
     }
   };
 
-  const handlecombineSearch = async (req, res, category, query, price) => {
-    try {
-      let products = await Product.find(
-        { category, 
-          price: {
-            $gte: price[0],
-            $lte: price[1],
-          },
-          $or: [
-            {title:{$regex: query, $options: 'i'}},
-            {description: {$regex: query, $options: 'i'}}
-          ],
-        
-          })
-      .populate('category', '_id name')
-      .populate('subcategories', '_id name')
-      .populate('ratings', '_id postedBy')
-      .exec();
-  
-      res.json(products)
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   const handleStar = (req, res, stars) => {
     Product.aggregate([
@@ -273,7 +264,7 @@ exports.sortedlist = async (req, res) => {
       .limit(12)
       .exec((err, aggregates) => {
         if (err) console.log("AGGREGATE ERROR", err);
-        Product.find({ _id: aggregates })
+        Product.find({ _id: aggregates, deleted: {$ne: true} })
         .populate('category', '_id name')
         .populate('subcategories', '_id name')
         .populate('ratings', '_id postedBy')
@@ -286,7 +277,7 @@ exports.sortedlist = async (req, res) => {
 
 
   const handleSub = async (req, res, sub) => {
-    const products = await Product.find({ subcategories: sub })
+    const products = await Product.find({ subcategories: sub, deleted: {$ne: true}})
     .populate('category', '_id name')
     .populate('subcategories', '_id name')
     .populate('ratings', '_id postedBy')
@@ -296,7 +287,7 @@ exports.sortedlist = async (req, res) => {
   };
   
   const handleShipping = async (req, res, shipping) => {
-    const products = await Product.find({ shipping })
+    const products = await Product.find({ shipping, deleted: {$ne: true}})
     .populate('category', '_id name')
     .populate('subcategories', '_id name')
     .populate('ratings', '_id postedBy')
@@ -306,7 +297,7 @@ exports.sortedlist = async (req, res) => {
   };
   
   const handleColor = async (req, res, color) => {
-    const products = await Product.find({ color })
+    const products = await Product.find({ color, deleted: {$ne: true} })
     .populate('category', '_id name')
     .populate('subcategories', '_id name')
     .populate('ratings', '_id postedBy')

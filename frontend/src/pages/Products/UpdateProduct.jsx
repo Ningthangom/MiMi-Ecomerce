@@ -22,6 +22,7 @@ import ProductUpdateForm from '../../components/Forms/ProuductUpdateForm'
               category: "",
               subcategories: [],
               shipping: "",
+              measurement: "",
               quantity: "",
               images: [],
               colors: [
@@ -128,7 +129,7 @@ const UpdateProduct = () => {
         console.log(res.data);
         toast.success(`${res.data.title} is posted successfully`);
         setValues(initialState);
-        navigate("/admin/products");
+        navigate("/admin/dashboard");
       })
       .catch((err) => {
         if (err.response.status === 401) {

@@ -13,26 +13,36 @@ const AdminNav = () => {
   return (
     <nav>
       <li className="nav-item">
-          <Link to="/admin/dashboard" className="nav-link btn btn-primary">
+          <Link to="/admin/dashboard" className="nav-link btn btn-primary text-white">
             Dashboard
           </Link>
         </li>
       <ul className="nav flex-column mt-2 cl-2">
       <li className="nav-item">
-          <Link to="/admin/category" className="nav-link btn btn-primary">
+          <Link to="/admin/category" className="nav-link btn btn-primary text-white">
            category
           </Link>
         </li>
         <ProductNav />
        <SubCategory/>
+      {/*  <li className="nav-item">
+          <Link to="/admin/subcategory" className="nav-link btn btn-primary text-white">
+           subcategory
+          </Link>
+        </li> */}
      {/* orders................................................................. */}
         <li className="nav-item">
-          <Link to="/admin/orders" className="nav-link btn btn-primary">
+          <Link to="/admin/coupon/new" className="nav-link btn btn-primary text-white">
             coupon
           </Link>
         </li>
         <li className="nav-item">
-          <Link to="/user/password" className="nav-link btn btn-primary">
+          <Link to="/admin/sales" className="nav-link btn btn-primary text-white">
+            sales
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link to="/user/password" className="nav-link btn btn-primary text-white">
             password
           </Link>
         </li>

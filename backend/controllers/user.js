@@ -3,9 +3,10 @@ const Product = require("../models/product");
 const Cart = require("../models/cart");
 const Coupon = require("../models/coupon");
 const Order = require("../models/order");
+const uniqueid = require("uniqueid")
 
 exports.userCart = async (req, res) => {
-  console.log("this is req body inside userCart: ",req.body); // {cart: []}
+/*   console.log("this is req body inside userCart: ",req.body); */ // {cart: []}
   const { cart } = req.body;
 
   let products = [];
@@ -53,7 +54,7 @@ exports.userCart = async (req, res) => {
     orderdBy: user._id,
   }).save();
 
-  console.log("new cart", newCart);
+ /*  console.log("new cart", newCart); */
   res.json({ ok: true });
 };
 
@@ -134,7 +135,7 @@ exports.applyCouponToUserCart = async (req, res) => {
 
 // order_status
 exports.createOrder = async(req, res) => {
-  console.log("reqbody in create order", req.body);
+ /*  console.log("reqbody in create order", req.body); */
   const {paymentIntent} = req.body.stripeResponse;
 
   const user = await User.findOne({email: req.user.email}).exec();
@@ -150,8 +151,176 @@ exports.createOrder = async(req, res) => {
   }).save().catch((err) => {
     console.log("error in creating order: ", err)
   })
-  
-  console.log("New order has been saved", newOrder);
-  res.json({ok: true})
+
+   // decrement quantity, increment sold
+   // 
+   let bulkOption = products.map((item) => {
+    return {
+      updateOne: {
+        filter: { _id: item.product._id }, // IMPORTANT item.product
+        update: { $inc: { quantity: -item.count, sold: +item.count } },
+      },
+    };
+  });
+  // bulkWrite will update multiple objects at once
+  let updated = await Product.bulkWrite(bulkOption, {});
+  /* console.log("PRODUCT QUANTITY-- AND SOLD++", updated); */
+   const justCreatedOrder = await Order
+                                  .find()
+                                  .sort({'_id':-1})
+                                  .populate("products.product")
+                                  .limit(1)
+ /*  console.log("New order has been saved", newOrder); */
+  res.json({ ok: true, justCreatedOrder});
 
 }
+
+
+exports.orderList = async (req, res) => {
+  const user = await User.findOne({email: req.user.email}).exec();
+  console.log("this is user", user)
+  const orderList = await Order.find({orderdBy:user._id})
+  .sort("-createdAt")
+  .populate("products.product")
+  .exec();
+
+  res.json(orderList);
+}
+
+
+// create or add to wishList 
+exports.addToWhishList = async (req, res) => {
+  const {productId} = req.body;
+  const user = await User.findOneAndUpdate(
+    { email: req.user.email },
+    {$addToSet: {wishlist: productId}}
+    ).exec();
+
+    res.json({ok: true})
+}
+
+exports.wishlist = async (req, res) => {
+  const list = await User.findOne({ email: req.user.email })
+    .select("wishlist")
+    .sort({"wishlist": -1})
+    .populate("wishlist")
+    .exec();
+
+  res.json(list);
+};
+
+exports.removeFromWishlist = async (req, res) => {
+  const { productId } = req.params;
+  const user = await User.findOneAndUpdate(
+    { email: req.user.email },
+    { $pull: { wishlist: productId } }
+  ).exec();
+
+  res.json({ ok: true });
+};
+
+
+
+
+exports.createCashOrder = async (req, res) => {
+  console.log("createCashOrder is called: ", req.body)
+  const { COD, couponApplied } = req.body;
+  // if COD is true, create order with status of Cash On Delivery
+
+  if (!COD) return res.status(400).send("Create cash order failed");
+
+  const user = await User.findOne({ email: req.user.email }).exec();
+
+  let userCart = await Cart.findOne({ orderdBy: user._id }).exec();
+
+  let finalAmount = 0;
+
+  if (couponApplied && userCart.totalAfterDiscount) {
+    finalAmount = userCart.totalAfterDiscount * 100;
+  } else {
+    finalAmount = userCart.cartTotal * 100;
+  }
+
+  let newOrder = await new Order({
+    products: userCart.products,
+    paymentIntent: {
+      id: uniqueid(),
+      amount: finalAmount,
+      currency: "aud",
+      status: "Cash On Delivery",
+      created: Date.now(),
+      payment_method_types: ["cash"],
+    },
+    orderdBy: user._id,
+    orderType: "Cash On Delivery",
+  }).save();
+
+  // decrement quantity, increment sold
+  let bulkOption = userCart.products.map((item) => {
+    return {
+      updateOne: {
+        filter: { _id: item.product._id }, // IMPORTANT item.product
+        update: { $inc: { quantity: -item.count, sold: +item.count } },
+      },
+    };
+  });
+
+  let updated = await Product.bulkWrite(bulkOption, {});
+  console.log("PRODUCT QUANTITY-- AND SOLD++", updated);
+
+  console.log("NEW cash   ORDER SAVED", newOrder);
+  res.json({ ok: true, newOrder});
+};
+
+
+
+exports.createPickupOrder = async (req, res) => {
+  console.log("create pickup order is called: ", req.body)
+  const { PNP, couponApplied } = req.body;
+  // if COD is true, create order with status of Cash On Delivery
+
+  if (!PNP) return res.status(400).send("Create pickup order failed");
+
+  const user = await User.findOne({ email: req.user.email }).exec();
+
+  let userCart = await Cart.findOne({ orderdBy: user._id }).exec();
+
+  let finalAmount = 0;
+
+  if (couponApplied && userCart.totalAfterDiscount) {
+    finalAmount = userCart.totalAfterDiscount * 100;
+  } else {
+    finalAmount = userCart.cartTotal * 100;
+  }
+
+  let newOrder = await new Order({
+    products: userCart.products,
+    paymentIntent: {
+      id: uniqueid(),
+      amount: finalAmount,
+      currency: "aud",
+      status: "pickup order",
+      created: Date.now(),
+      payment_method_types: ["cash"],
+    },
+    orderdBy: user._id,
+    orderType: "pickup order",
+  }).save();
+
+  // decrement quantity, increment sold
+  let bulkOption = userCart.products.map((item) => {
+    return {
+      updateOne: {
+        filter: { _id: item.product._id }, // IMPORTANT item.product
+        update: { $inc: { quantity: -item.count, sold: +item.count } },
+      },
+    };
+  });
+
+  let updated = await Product.bulkWrite(bulkOption, {});
+  console.log("PRODUCT QUANTITY-- AND SOLD++", updated);
+
+  console.log("NEW pickup   ORDER SAVED", newOrder);
+  res.json({ ok: true, newOrder});
+};
+

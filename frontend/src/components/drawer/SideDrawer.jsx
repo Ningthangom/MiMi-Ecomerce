@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import general from '../../images/general.jpg'
 
 const SideDrawer = ({ children }) => {
-    console.log("drawer is called")
+   /*  console.log("drawer is called") */
     const dispatch = useDispatch();
     const { drawer, cart } = useSelector((state) => ({ ...state }));
   

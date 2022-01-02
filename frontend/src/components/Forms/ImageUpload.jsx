@@ -93,7 +93,7 @@ const ImageUpload= ({values, setValues, setLoading}) => {
 
     return (
       <>
-        <div className="row">
+        <div className="col">
           {values.images &&
             values.images.map((image) => (
               <Badge
@@ -112,8 +112,8 @@ const ImageUpload= ({values, setValues, setLoading}) => {
             ))}
         </div>
 
-        <div className="row">
-          <label className="btn  btn-primary">
+        <div className="row mt-2">
+          <label className="btn  btn-primary" style={{width: '15%'}}>
             Choose Image
             <input
               type="file"

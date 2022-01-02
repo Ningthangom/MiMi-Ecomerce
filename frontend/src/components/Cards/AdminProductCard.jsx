@@ -7,7 +7,7 @@ const { Meta } = Card;
 const AdminProductCard = ({product, handleRemove, handleUpdate}) => {
 
  // destructure
- const { title, description, images, slug } = product;
+ const { title, description, images, slug, measurement,price } = product;
  const {user } = useSelector((state) => ({ ...state}));
 
     return (
@@ -36,6 +36,11 @@ const AdminProductCard = ({product, handleRemove, handleUpdate}) => {
       <Meta 
       title={title} 
        description={`${description && description.substring(0, 40)}...`} />
+        <Meta
+         className="text-danger"
+         title={`$ ${price}  ${measurement && measurement !== "other" ? ` per  ${measurement} `: ``}`}
+        
+       />
     </Card>
     )
 

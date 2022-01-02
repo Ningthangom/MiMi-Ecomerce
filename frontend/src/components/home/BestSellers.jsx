@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {sortProducts, productCount} from '../../connectBackend/product';
 import { toast } from "react-toastify";
 
@@ -12,9 +12,11 @@ const BestSellers = () => {
     const [loading, setLoading] = useState(false);
     const [totalProductCount, setTotalProductCount] = useState(0);
     const [pageNum, setPageNum] = useState(1);
+    const pageSizeRef = useRef(10)
 
     useEffect(() => {
         mostSold()
+        console.log("page Num changed is called", pageNum)
     }, [pageNum])
 
     useEffect(() => {
@@ -38,6 +40,7 @@ const BestSellers = () => {
         })
     }
 
+    
 
     return (
         <>
@@ -58,8 +61,18 @@ const BestSellers = () => {
         <nav className="col-md-4 offset-md-4 text-center pt-5 p-3">
           <Pagination
             current={pageNum}
-            total={(totalProductCount / 3) * 10}
+            total={(totalProductCount / 2) * 10}
             onChange={(value) => setPageNum(value)}
+          /*  onChange={(newCurrent, newPageSize) => {
+            const pageSizeChange = pageSizeRef.current !== newPageSize;
+            if (pageSizeChange) {
+              setPageNum(1);
+            } else {
+              setPageNum(newCurrent);
+            }
+            pageSizeRef.current = newPageSize;
+          }}
+          showSizeChanger={true} */
           />
         </nav>
       </div>

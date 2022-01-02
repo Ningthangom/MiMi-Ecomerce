@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
@@ -7,6 +7,7 @@ import ProductCardInCheckout from "../components/Cards/ProductCardInCheckout";
 import CartTableBody from '../components/Cards/CartTableBody'
 import CartTable from "../components/Cards/CartTable";
 import {userCart} from '../connectBackend/user'
+import { toast } from "react-toastify";
 
 const Cart = () => {
   const { cart, user } = useSelector((state) => ({ ...state }));
@@ -20,6 +21,17 @@ const Cart = () => {
     }, 0);
   };
 
+  useEffect(() => {
+    dispatch({
+      type: "COD",
+      payload: false,
+    });
+    dispatch({
+      type: "PNP",
+      payload: false,
+    });
+  },[])
+
   const saveOrderToDb = () => {
     // 
     userCart(cart, user.token)
@@ -28,10 +40,53 @@ const Cart = () => {
       if(res.data.ok){
        navigate('/user/checkout')}
     })
-    .catch((err) => console.log("cart save err", err));
-   
+    .catch((err) =>{
+      if(err.status === 401) {
+        toast.error("please logout and login again")
+      }
+      toast.error(err.message)
+    })
   };
 
+
+  const saveCashOrderToDb = () => {
+    // console.log("cart", JSON.stringify(cart, null, 4));
+    dispatch({
+      type: "COD",
+      payload: true,
+    });
+    userCart(cart, user.token)
+      .then((res) => {
+        console.log("CART POST RES", res);
+        if (res.data.ok) navigate("/user/checkout");
+      })
+    .catch((err) => {
+      if(err.status === '401') {
+        toast.error("please logout and login again")
+      }
+      console.log("cart save err", err)
+    }
+    );
+  };
+  const savePickupOrderToDb = () => {
+    // console.log("cart", JSON.stringify(cart, null, 4));
+    dispatch({
+      type: "PNP",
+      payload: true,
+    });
+    userCart(cart, user.token)
+      .then((res) => {
+        console.log("CART POST RES", res);
+        if (res.data.ok) navigate("/user/checkout");
+      })
+    .catch((err) => {
+      if(err.status === '401') {
+        toast.error("please logout and login again")
+      }
+      console.log("cart save err", err)
+    }
+    );
+  };
   const showCartItems = () => (
     <Table>
     <Thead>
@@ -40,7 +95,7 @@ const Cart = () => {
         <Th>Title</Th>
         <Th>Price</Th>
         <Th>Brand</Th>
-        <Th>Color</Th>
+       {/*  <Th>Color</Th> */}
         <Th>Count</Th>
         <Th >Shipping</Th>
         <Th >Remove</Th>
@@ -83,13 +138,31 @@ const Cart = () => {
           Total: <b>${getTotal()}</b>
           <hr />
           {user ? (
+            <>
             <button
               onClick={saveOrderToDb}
               className="btn btn-sm btn-primary mt-2"
               disabled={!cart.length}
             >
-              Proceed to Checkout
+            pay now and delivery
             </button>
+            <br />
+              <button
+                onClick={saveCashOrderToDb}
+                className="btn btn-sm btn-warning mt-2"
+                disabled={!cart.length}
+              >
+                Pay Cash on Delivery
+              </button>
+              <br />
+              <button
+                onClick={savePickupOrderToDb}
+                className="btn btn-sm btn-secondary mt-2"
+                disabled={!cart.length}
+              >
+                Pickup and pay
+              </button>
+            </>
           ) : (
             <button className="btn btn-sm btn-primary mt-2">
               <Link

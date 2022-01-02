@@ -37,7 +37,7 @@ const CategoryNav = () => {
         </ListItemButton>
         <Collapse in={category} timeout="auto" unmountOnExit >
         <List component="div" disablePadding>
-            <ListItemButton sx={{ pl: 4 }} className="bg-primary mb-1" style={{borderRadius: 10}}>
+            <ListItemButton sx={{ pl: 4 }} className="bg-danger mb-1" style={{borderRadius: 10}}>
               <ListItemIcon>
                 <FormatListBulletedIcon />
               </ListItemIcon>

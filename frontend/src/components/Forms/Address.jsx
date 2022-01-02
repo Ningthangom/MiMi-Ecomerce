@@ -1,14 +1,17 @@
 import React from "react";
 
-const Address = ({ handleSubmit, handleChange, setValues, values }) => {
+const Address = ({ handleSubmit, handleChange, setValues, values, PNP }) => {
   // destructing state
   const { address, city, country, phoneNo, postalCode } = values;
-  console.log("this is values inside productform: ", values);
+  
+  /* console.log("this is values inside productform: ", values); */
 
   return (
     <form onSubmit={handleSubmit} className="pb-0 mb-0 m-4">
       <div className="form-group">
-        <label>Street Name</label>
+       {PNP === false ? (
+         <>
+       <label>Street Name</label>
         <input
           placeholder="number and street name"
           type="type"
@@ -63,6 +66,20 @@ const Address = ({ handleSubmit, handleChange, setValues, values }) => {
           autoFocus
           required
         />
+        </>): (  
+          <> 
+          <label>Phone Number</label>
+          <input
+            placeholder="phoneNo"
+            type="number"
+            className="form-control mb-2 "
+            name="phoneNo"
+            value={phoneNo}
+            onChange={handleChange}
+            autoFocus
+            required
+          /></>
+       )} 
         <button className="btn btn-outline-primary btn-primary float-right mt-0">
           Save
         </button>

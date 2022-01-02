@@ -15,14 +15,15 @@ import {
 
 
 const initialState = {
-  title: "apple",
-  description: "good",
-  price: "120",
+  title: "",
+  description: "",
+  price: "",
   categories: [],
   category: "",
   subcategories: [],
-  shipping: "Yes",
-  quantity: "3",
+  shipping: "",
+  measurement: "",
+  quantity: "",
   images: [],
   colors: [
     "Yellow",
@@ -34,7 +35,7 @@ const initialState = {
     "Black",
     "others",
   ],
-  brand: "apple",
+  brand: "",
   color: "Red",
 };
 

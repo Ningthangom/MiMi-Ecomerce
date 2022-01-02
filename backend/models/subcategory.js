@@ -1,6 +1,7 @@
 
 const mongoose = require('mongoose');
 const {ObjectId} = mongoose.Schema;
+var mongoose_delete = require('mongoose-delete');
 
 
 const subcategorySchema = new mongoose.Schema({
@@ -27,5 +28,7 @@ const subcategorySchema = new mongoose.Schema({
     }
 
 }, {timestamps: true});
+
+subcategorySchema.plugin(mongoose_delete, { deletedAt : true });
 
 module.exports =  mongoose.model('Subcategory', subcategorySchema);

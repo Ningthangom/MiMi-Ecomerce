@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema;
 
 const orderSchema = new mongoose.Schema(
-
   {
     products: [
       {
@@ -15,15 +14,26 @@ const orderSchema = new mongoose.Schema(
       },
     ],
     paymentIntent: {},
+    orderType: {
+        type: String,
+        default: "pay and deliver",
+        enum: [
+        "pickup order",
+         "Cash On Delivery",
+         "pay and deliver",
+        ],
+    },
     orderStatus: {
       type: String,
       default: "Not Processed",
       enum: [
         "Not Processed",
         "processing",
+      /*   "Cash On Delivery",
+        "pickup order", */
         "Dispatched",
         "Cancelled",
-        "Completed",
+        "Completed",  
       ],
     },
     orderdBy: { type: ObjectId, ref: "User" },

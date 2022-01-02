@@ -54,27 +54,13 @@ const ProductNav = () => {
               {/* <ListItemText primary="add new category" to="/user/password"/> */}
               <ListItemText>New</ListItemText>
             </ListItemButton>
-            <List component="div" disablePadding>
-            <ListItemButton sx={{ pl: 4 }} className="bg-primary mt-1" style={{borderRadius: 10}}>
-              <ListItemIcon>
-                <EditIcon />
-              </ListItemIcon>
-              {/* <ListItemText primary="add new category" to="/user/password"/> */}
-              <Link to="/category" className="text-white">edit</Link>
-            </ListItemButton>
-          </List>
-            <ListItemButton sx={{ pl: 4 }} className="bg-danger mt-1" style={{borderRadius: 10}}>
-              <ListItemIcon>
-                <DeleteOutlineIcon />
-              </ListItemIcon>
-              {/* <ListItemText primary="add new category" to="/user/password"/> */}
-              <Link to="/category" className="text-white" >remove</Link>
-            </ListItemButton>
+         
+           
           </List>
           <List component="div" disablePadding>
             <ListItemButton
              sx={{ pl: 4 }} 
-             className="bg-primary mt-1" 
+             className="bg-danger mt-1" 
              style={{borderRadius: 10}}
              onClick={handleClickList}
              >

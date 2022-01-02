@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import {
   getAllProducts,
-  fetchProductsByFilter,
+  fetchProductsByFilter,  
 } from "../connectBackend/product";
 import { getAllCategories } from "../connectBackend/category";
 import { getAllsubCategories } from "../connectBackend/subcategory";
 import { useSelector, useDispatch } from "react-redux";
-import ProductCard from "../components/Cards/ProductCard";
+import ProductCardForShop from "../components/Cards/ProductCardForShop"
 import { Menu, Slider, Checkbox, Radio } from "antd";
 import {
   DollarOutlined,
@@ -15,9 +15,14 @@ import {
 } from "@ant-design/icons";
 import Star from "../components/Forms/Star";
 
+// media quries
+import json2mq from "json2mq";
+import useMediaQuery from "@mui/material/useMediaQuery";
+
 const { SubMenu, ItemGroup } = Menu;
 
 const Shop = () => {
+
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [price, setPrice] = useState([0, 10000]);
@@ -30,6 +35,12 @@ const Shop = () => {
   const [subs, setSubs] = useState([]);
   const [sub, setSub] = useState("");
 
+    // media quries
+    const matches = useMediaQuery(
+      json2mq({
+        minWidth: 500,
+      })
+    );
 
   const [brands, setBrands] = useState([
     "Apple",
@@ -61,7 +72,7 @@ const Shop = () => {
   useEffect(() => {
     loadAllProducts();
     getAllCategories().then((res) => setCategories(res.data));
-/*     console.log(products); */
+   /*  console.log(products); */
     getAllsubCategories().then((res) => setSubs(res.data));
   }, []);
 
@@ -76,23 +87,24 @@ const Shop = () => {
    /*  console.log("loadAllProduct is called"); */
     getAllProducts(12)
       .then((p) => {
-        setProducts(p.data);
+        /* let existingProducts = p.data.filter(product => (product.deleted === false)) */
+      /*   setProducts(p.data); */
 
         setLoading(false);
-        /* console.log(products); */
+        console.log("this is products in shop", p.data);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  // 2. load products on user search input
+   // 2. load products on user search input
   useEffect(() => {
     const delayed = setTimeout(() => {
       fetchProducts({ query: text });
     }, 300);
     return () => clearTimeout(delayed);
-  }, [text]);
+  }, [text]); 
 
   // 3. load products based on price range
   useEffect(() => {
@@ -273,7 +285,7 @@ const Shop = () => {
   return (
     <div className="container-fluid">
       <div className="row">
-        <div className="col-md-3">
+        {matches ? (<div className="col-md-3">
           <h4> search/filter menu </h4>
           <hr />
           <Menu defaultOpenKeys={["1", "2"]} mode="inline">
@@ -359,7 +371,8 @@ const Shop = () => {
               </div>
             </SubMenu>
           </Menu>
-        </div>
+        </div>): null}
+      
 
         <div className="col-md-9">
           {loading ? (
@@ -374,7 +387,7 @@ const Shop = () => {
             {products &&
               products.map((p) => (
                 <div key={p._id} className="col-md-4 mt-3">
-                  <ProductCard product={p} />
+                  <ProductCardForShop product={p} />
                 </div>
               ))}
           </div>

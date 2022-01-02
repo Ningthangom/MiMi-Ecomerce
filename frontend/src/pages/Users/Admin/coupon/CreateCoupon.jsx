@@ -21,7 +21,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 const CreateCouponPage = () => {
 
     const [name, setName] = useState("");
-    const [expiry, setExpiry] = useState("");
+    const [expiry, setExpiry] = useState(new Date());
     const [discount, setDiscount] = useState("");
     const [loading, setLoading] = useState("");
     const [coupons, setCoupons] = useState([]);
@@ -56,7 +56,7 @@ const CreateCouponPage = () => {
         loadAllCoupons();
         toast.success(`"${res.data.name}" is created`);
       })
-      .catch((err) => console.log("create coupon err", err));
+      .catch((err) => toast.error("create coupon err", err));
   };
 
 
@@ -114,7 +114,7 @@ const CreateCouponPage = () => {
               <br />
               <DatePicker
                 className="form-control"
-                selected={new Date()}
+                selected={expiry}
                 value={expiry}
                 onChange={(date) => setExpiry(date)}
                 required

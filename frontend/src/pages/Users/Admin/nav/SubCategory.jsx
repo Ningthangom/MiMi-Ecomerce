@@ -56,7 +56,7 @@ const SubCategory = () => {
           <List component="div" disablePadding>
             <ListItemButton sx={{ pl: 4 }}
              onClick={handleClickList}
-             className="bg-primary mt-1" style={{borderRadius: 10}}
+             className="bg-danger mt-1" style={{borderRadius: 10}}
              >
               <ListItemIcon>
                 <FormatListBulletedIcon />

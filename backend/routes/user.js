@@ -11,7 +11,13 @@ const {
   emptyCart,
   saveAddress,
   applyCouponToUserCart,
-  createOrder
+  createOrder,
+  orderList,
+  addToWhishList,
+  wishlist,
+  removeFromWishlist,
+  createCashOrder,
+  createPickupOrder
 } = require("../controllers/user");
 
 router.post("/user/cart", authCheck, userCart); // save cart
@@ -25,4 +31,21 @@ router.post("/user/cart/coupon", authCheck, applyCouponToUserCart);
 
 // orders 
 router.post("/user/order", authCheck, createOrder);
+router.get("/user/orders", authCheck,orderList);
+router.post("/user/cash-order", authCheck, createCashOrder); // cod
+router.post("/user/pickup-order", authCheck, createPickupOrder);
+
+
+// wishList 
+router.post("/user/wishlist", authCheck, addToWhishList);
+router.get("/user/wishlist", authCheck, wishlist);
+router.put("/user/wishlist/:productId", authCheck, removeFromWishlist);
+
+
+router.get("/user/testing", (req, res, next) => {
+  res.json({msg: "hello"})
+})
+
+
+
 module.exports = router;

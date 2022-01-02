@@ -56,7 +56,7 @@ const ForgotPassword = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   autoFocus />
                   <br/> 
-                  <button className=" btn btn-raised" style={{backgroundColor: 'blue'}} disabled={!email} > Get a link</button>
+                  <button className=" btn btn-raised" style={{backgroundColor: 'blue', color: 'white'}} disabled={!email} > Get a link</button>
             </form>
         </div>
     )

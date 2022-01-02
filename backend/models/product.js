@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+var mongoose_delete = require('mongoose-delete');
 const {ObjectId} = mongoose.Schema;
 
 
@@ -63,6 +64,10 @@ const productSchema = new mongoose.Schema({
         // enum will set the values to choose from
         enum:["Yes", "No"]
     },
+    measurement: {
+        type: String,
+        enum: ["kg","liter","bag","item","bottle","other"]
+    },
     color: {
         type: String,
         enum: ["Yellow", "Red", "Brown", "Silver", "White", "Blue", "Black", "others"]
@@ -79,6 +84,7 @@ const productSchema = new mongoose.Schema({
         }
     }]
 
-}, {timestamps: true})
+}, {timestamps: true});
 
+productSchema.plugin(mongoose_delete, { deletedAt : true });
 module.exports = mongoose.model("Product", productSchema);

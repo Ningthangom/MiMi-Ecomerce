@@ -15,7 +15,8 @@ const ListProducts = () => {
 
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false );
-    const {user}= useSelector((state) => ({...state}))
+    const {user}= useSelector((state) => ({...state}));
+    const [searchText, setSearchText] = useState("")
    
     const navigate = useNavigate();
 
@@ -29,12 +30,12 @@ const ListProducts = () => {
         getAllProducts(100)
           .then((c) => {
             setProducts(c.data);
-            console.log("this is products from: ", c.data)
+           /*  console.log("this is products from: ", c.data) */
             setLoading(false);
           })
           .catch((error) => {
             toast.error("products could not be loaded");
-            console.log(error);
+           /*  console.log(error); */
             setLoading(false);
           });
       };
@@ -44,13 +45,13 @@ const ListProducts = () => {
         console.log("delete Proudct is called", slugfromfunc);
         await removeAproduct(slugfromfunc, user.token)
           .then((res) => {
-            console.log(res.data);
+          /*   console.log(res.data); */
             toast.success(`product name: "${slugfromfunc}" has been deleted`);
             getProducts();
           })
           .catch((error) => {
             toast.error("product could not be deleted");
-            console.log("error in deleting product", error);
+         /*    console.log("error in deleting product", error); */
           
           });
       };
@@ -59,6 +60,11 @@ const ListProducts = () => {
         navigate(`/admin/products/update/${slug}`)
       }
 
+      const handleSearch = (e) => {
+        e.preventDefault();
+        setSearchText((e.target.value).replace(/ /g,''))
+      }
+      const searchfilter = (searchText) => (c)=> c.title.includes(searchText);
 
     return (
       <div className="container-fluid">
@@ -73,8 +79,15 @@ const ListProducts = () => {
             <h4>All Products</h4>
           )}
           <div className="row">
-            {products.map((product) => (
-              <div key={product._id} className="col-md-4 ">
+          <input
+          type="search"
+          placeholder="enter product name"
+          value={searchText}
+          onChange={handleSearch} 
+          className="form-control mb-4"
+        />
+            {products.filter(searchfilter(searchText)).map((product) => (
+              <div key={product._id} className="col-md-3 ">
                 <AdminProductCard product={product} handleRemove={handleRemove} handleUpdate={handleUpdate}/>
               </div>
             ))}

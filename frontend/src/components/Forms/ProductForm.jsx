@@ -28,7 +28,7 @@ const ProductForm = ({
     brand,
     color,
   } = values;
-  console.log("this is values inside productform: ", values);
+ /*  console.log("this is values inside productform: ", values); */
 
   return (
     <form onSubmit={handleSubmit}>
@@ -66,6 +66,20 @@ const ProductForm = ({
             <option value="No">No</option>
             <option value="Yes">Yes</option>
           </select>
+          <label>Measurement type</label>
+          <select
+            name="measurement"
+            className="form-control"
+            onChange={handleChange}
+          >
+            <option>Please select one</option>
+            <option value="kg">kg</option>
+            <option value="liter"> liter</option>
+            <option value="item"> item</option>
+            <option value="bag">bag</option>
+            <option value="bottle">bottle</option>
+            <option value="other">other</option>
+          </select>
         </div>
         <div className="form-group">
           <label>Quantity</label>
@@ -80,7 +94,7 @@ const ProductForm = ({
             required
           />
         </div>
-        <div className="form-group">
+      {/*   <div className="form-group">
           <label>Colors</label>
           <select
             name="color"
@@ -95,7 +109,7 @@ const ProductForm = ({
               </option>
             ))}
           </select>
-        </div>
+        </div> */}
         <div className="form-group">
           <label>Brand</label>
           <input

@@ -21,18 +21,15 @@ const AdminDashBoard = () => {
       <div className="row">
         {matches ? (
           <React.Fragment>
-            <div className="colmd-2 ml-3">
+            <div className="col-md-2 ml-3">
               <AdminNav />
             </div>
             <div className="col">
-              {/* <p>Admin Dashboard</p> */}
               <ListProducts/>
             </div>
           </React.Fragment>
         ) : (
           <div className="col">
-            {/* <p>Admin Dashboard</p> */}
-           {/* This is Dashboard */}
            <ListProducts/>
           </div>
         )}

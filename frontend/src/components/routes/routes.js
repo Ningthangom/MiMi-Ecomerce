@@ -1,51 +1,55 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, lazy, Suspense} from "react";
 import {
     useRoutes,
     Outlet
   } from "react-router-dom";
-
-import Login from "../../pages/Auth/Login";
-import Register from "../../pages/Auth/Register";
-import RegisterComplete from "../../pages/Auth/RegisterComplete";
-import ForgotPassword from "../../pages/Auth/ForgotPassword";
-import Home from "../../pages/Home";
+  import { currentAdmin } from "../../connectBackend/auth";
+  // auth
+const TestLogin = lazy(() => import('../../pages/Auth/TestLogin') ) 
+const Register = lazy(() => import("../../pages/Auth/Register") ) ;
+const RegisterComplete = lazy(() => import("../../pages/Auth/RegisterComplete") ) ;
+const ForgotPassword = lazy(() => import("../../pages/Auth/ForgotPassword") ) ;
+const Home = lazy(() => import ("../../pages/Home") ) ;
 
 // Admin components
-import AdminDashBoard from "../../pages/Users/Admin/dashboard"
-import Category from "../../pages/Users/Admin/Category"
-import SubCategory from "../../pages/Users/Admin/SubCategory"
-import AddSubCategory from "../../pages/SubCategory/AddSubCategory"
+const AdminDashBoard = lazy(() => import ("../../pages/Users/Admin/dashboard")) 
+const Category = lazy(() => import ("../../pages/Users/Admin/Category")) 
+const SubCategory = lazy(() => import("../../pages/Users/Admin/SubCategory") ) 
+const AddSubCategory = lazy(() => import("../../pages/SubCategory/AddSubCategory") ) 
 
 //admin product
-import CreateProductAdmin from "../../pages/Users/Admin/Product/CreateProductAdmin"
-import ListProducts from "../../pages/Products/ListProducts"
-import UpdateProductAdmin from "../../pages/Users/Admin/Product/UpdateProductAdmin"
+const CreateProductAdmin = lazy(() => import("../../pages/Users/Admin/Product/CreateProductAdmin") ) 
+const ListProducts = lazy(() => import ("../../pages/Products/ListProducts") )
+const UpdateProductAdmin = lazy(() => import  ("../../pages/Users/Admin/Product/UpdateProductAdmin"))
 
-import UpdateSubCategory from "../../pages/SubCategory/UpdateSubcategory"
-import OrdersAdmin from "../../pages/Users/Admin/OrdersAdmin"
-import UpdateCategory from '../../pages/Category/UpdatCategory'
+const UpdateSubCategory = lazy(() => import("../../pages/SubCategory/UpdateSubcategory") ) 
+const OrdersAdmin = lazy(() => import("../../pages/Users/Admin/OrdersAdmin") ) 
+const UpdateCategory = lazy(() => import ('../../pages/Category/UpdatCategory')) 
 
 
-import { currentAdmin } from "../../connectBackend/auth";
+
 
 // user
-import History from "../../pages/Users/Customer/History";
-import Password from "../../pages/Users/Customer/Password";
-import Wishlist from "../../pages/Users/Customer/Wishlist"
-import Payment from "../../pages/Stripe/Payment";
+const History = lazy(() => import("../../pages/Users/Customer/History")) ;
+const Password = lazy(() => import("../../pages/Users/Customer/Password")) ;
+const Wishlist = lazy(() => import("../../pages/Users/Customer/Wishlist")) 
+const Payment = lazy(() => import ("../../pages/Stripe/Payment")) ;
 
 // Admin routes
-import LoadingToRedirect from './LoadingToRedirect';
-import CreateCouponPage from '../../pages/Users/Admin/coupon/CreateCoupon'
+const LoadingToRedirect = lazy(() => import('./LoadingToRedirect')) ;
+const CreateCouponPage = lazy(() => import('../../pages/Users/Admin/coupon/CreateCoupon')) 
+const SalesPage = lazy(() => import('../../pages/Users/Admin/sales/salespage') ) 
+const PickupOrders = lazy(() => import('../order/PickupOrders')) 
 
 //general 
-import ProductDetail from "../../pages/ProductDetail"
-import CategoryHome from '../../components/Category/CategoryHome'
-import SubProducts from '../../components/Subcategories/SubProducts'
-import SearchProduct from '../../components/Forms/SearchProduct'
-import Shop from '../../pages/Shop'
-import Cart from '../../pages/Cart'
-import CheckOut from '../../pages/CheckOut'
+const ProductDetail = lazy(() => import ("../../pages/ProductDetail"))
+const CategoryHome = lazy(() => import ('../../components/Category/CategoryHome'))
+const SubProducts = lazy(() => import('../../components/Subcategories/SubProducts')) 
+const SearchProduct = lazy(() => import('../../components/Forms/SearchProduct')) 
+const Shop = lazy(() => import('../../pages/Shop')) 
+const Cart = lazy(() => import('../../pages/Cart')) 
+const CheckOut = lazy(() => import('../../pages/CheckOut')) 
+
 
 
 
@@ -76,7 +80,7 @@ export const App = ({isProtected}) => {
 
     let routes = useRoutes([
       { path: "/", element: <Home /> },
-      { path: "/login", element: <Login /> },
+      { path: "/login", element: <TestLogin /> },
       { path: "/register", element: <Register /> },
       { path: "/register/complete", element: <RegisterComplete /> },
       { path: "/forgot/password", element: <ForgotPassword /> },
@@ -103,6 +107,8 @@ export const App = ({isProtected}) => {
         {path: "/admin/products", element:  <ListProducts />},
         {path: "/admin/products/update/:slug", element:  <UpdateProductAdmin />},
         {path: "/admin/coupon/new", element:  <CreateCouponPage />},
+        {path: "/admin/sales", element:  <SalesPage />},
+        {path: "/admin/pickuporders", element:  <PickupOrders />},
 
     ]},
     // product routes 

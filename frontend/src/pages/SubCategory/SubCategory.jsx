@@ -101,7 +101,7 @@ const AddCategory = () => {
   return (
     <div className="container-fluid" ml-0>
       <div className="row">
-        <div className="">{/* <AdminNav /> */}</div>
+        <div className=""></div>
         <div className="col">
           {loading ? (
             <h4 className="text-danger">Loading...</h4>

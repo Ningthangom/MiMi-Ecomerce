@@ -63,7 +63,7 @@ const AddSubCategory =  () => {
              <div className="row">
         {matches ? (
           <React.Fragment>
-            <div className="colmd-2 ml-3">
+            <div className="col-md-2 ml-3">
               <AdminNav />
             </div>
             <div className="col">
@@ -84,11 +84,12 @@ const AddSubCategory =  () => {
                 ))}
             </select>
           </div>
+          <p>make sure to select a category first !!!</p>
              <FormCategory
                   handleSubmit={handleSubmit}
                   name={name}
                   setName={setName}
-                  placeholder="add new category"
+                  placeholder="add new subcategory"
                   style={{margin: 20}}
                 />
              </div>
@@ -112,12 +113,14 @@ const AddSubCategory =  () => {
                   </option>
                 ))}
             </select>
+          
           </div>
+          <p>make sure to select a category first !!!</p>
              <FormCategory
                   handleSubmit={handleSubmit}
                   name={name}
                   setName={setName}
-                  placeholder="add new category"
+                  placeholder="add new subategory"
                   style={{margin: 20}}
                 />
         </div>

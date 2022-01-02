@@ -1,37 +1,39 @@
-import React, { useEffect } from "react";
-import {
-  BrowserRouter as Router,
-} from "react-router-dom";
+import React, { useEffect, Suspense } from "react";
+import { BrowserRouter as Router } from "react-router-dom";
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import './index.css'
 
 // toast
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { LoadingOutlined } from "@ant-design/icons";
 
 // components
-import PrimarySearchAppBar from "./components/nav/HeaderMui";
-import Header from "./components/nav/Header"
+
 /* import Navbar from "./components/nav/menu/ManinNav"; */
-import Navbar from './components/nav/Navbar'
+import Navbar from "./components/nav/Navbar";
 
 // firebase
 import { auth } from "./firebase";
 import { onAuthStateChanged, getIdTokenResult } from "firebase/auth";
 
 // redux
-
 //This useDispatch hook returns a reference to the dispatch function from
 // the Redux store. You may use it to dispatch actions as needed.
 import { useDispatch, useSelector } from "react-redux";
 
 import { currentUser } from "./connectBackend/auth";
-import {App} from './components/routes/routes'
-import SideDrawer from './components/drawer/SideDrawer'
+
+import SideDrawer from "./components/drawer/SideDrawer";
+
+// socket
+import { SocketContext, socket } from "./connectBackend/socketConnect";
+import { App } from "./components/routes/routes";
 
 const AppWrapper = () => {
   const dispatch = useDispatch();
-  const {user} = useSelector((state) => ({ ...state }));
- /*  console.log("this is user: ", user); */
-
+  const { user } = useSelector((state) => ({ ...state }));
+  /*  console.log("this is user: ", user); */
 
   /*  const routing = useRoutes(App(isProtected)); */
 
@@ -56,14 +58,13 @@ const AppWrapper = () => {
                 token: idTokenResult.token,
                 role: res.data.role,
                 _id: res.data._id,
-                shippingInfo: res.data.shippingInfo
+                shippingInfo: res.data.shippingInfo,
               },
             });
           })
           .catch((err) => {
             console.log("sending token to backend did not work", err);
           });
-        
       }
     });
 
@@ -73,14 +74,18 @@ const AppWrapper = () => {
   }, [dispatch]);
 
   return (
-    <>
+    <Suspense fallback={
+      <div className="col text-center p-5">____Sein is L<LoadingOutlined/>ading____ </div>
+    }>
       <Router>
-      <Navbar   />
-      <SideDrawer/>
-      <ToastContainer   />
-        <App isProtected={user}/>
+        <SocketContext.Provider value={socket}>
+          <Navbar />
+          <SideDrawer />
+          <ToastContainer />
+          <App isProtected={user} />
+        </SocketContext.Provider>
       </Router>
-    </>
+    </Suspense>
   );
 };
 

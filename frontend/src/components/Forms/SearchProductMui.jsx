@@ -56,6 +56,7 @@ const SearchProductMui = () => {
             // make sure to put it in text object
             payload: {text: e.target.value}
         })
+        nav(`/shop?${e.target.value}`)
     }
 
 
@@ -74,7 +75,6 @@ const SearchProductMui = () => {
     onSearch={handleSubmit}
     style={{ width: 250 }}
     size='large'
-   
     onChange={e => handleChange(e)}
     enterButton />
 

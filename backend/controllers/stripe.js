@@ -16,7 +16,7 @@ exports.createPaymentIntent = async (req, res) => {
   //cart total is 
   const {cartTotal, totalAfterDiscount} = await Cart.findOne({orderdBy: user._id}).exec();
 
-  console.log("cartTotal: ", cartTotal, "totalAfterDiscount", totalAfterDiscount);
+/*   console.log("cartTotal: ", cartTotal, "totalAfterDiscount", totalAfterDiscount); */
   
   let finalAmount = 0;
   if(couponApplied && totalAfterDiscount) {
@@ -31,7 +31,7 @@ exports.createPaymentIntent = async (req, res) => {
     currency: "aud",
   })
 
-  console.log("createPaymentIntent is called: ", paymentIntent);
+  /* console.log("createPaymentIntent is called: ", paymentIntent); */
   const clientsecret = paymentIntent.client_secret;
   res.send({
     clientSecret:clientsecret,

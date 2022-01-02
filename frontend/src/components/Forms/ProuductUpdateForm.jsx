@@ -78,6 +78,20 @@ const ProductUpdateForm = ({
           <option value="No">No</option>
           <option value="Yes">Yes</option>
         </select>
+        <label>measurement type</label>
+        <select
+            name="measurement"
+            className="form-control"
+            onChange={handleChange}
+          >
+            <option>Please select one</option>
+            <option value="kg">kg</option>
+            <option value="liter"> liter</option>
+            <option value="item"> item</option>
+            <option value="bag">bag</option>
+            <option value="bottle">bottle</option>
+            <option value="other">other</option>
+          </select>
       </div>
 
       <div className="form-group">
